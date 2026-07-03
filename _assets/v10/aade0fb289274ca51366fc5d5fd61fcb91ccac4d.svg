@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" height="100%" overflow="visible" preserveAspectRatio="none" style="display: block;" viewBox="0 0 40 32" width="100%">
+<path d="M40 4C40 1.8 38.2 0 36 0H4C1.8 0 0 1.8 0 4V28C0 30.2 1.8 32 4 32H36C38.2 32 40 30.2 40 28V4ZM36 4L20 13.98L4 4H36ZM36 28H4V8L20 18L36 8V28Z" fill="var(--fill-0, #111111)" id="Vector"/>
+</svg>

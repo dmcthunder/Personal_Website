@@ -1,7 +1,9 @@
 /* ==========================================================================
    Diogo Maia Caetano — portfolio
-   Values taken from the Figma source: file 9kiJXVlILNN8RrkUuTrEnY,
-   frame "Desktop" 15224:1424 (1280px wide, 80px gutters).
+   Built from Figma file 9kiJXVlILNN8RrkUuTrEnY, section 15226:2689:
+   Desktop 15226:1740 (1280 / 80px gutters)
+   Tablet  15226:1958 (800 / 40px gutters)
+   Mobile  15226:2176 (375 / 16px gutters)
    ========================================================================== */
 
 @font-face {
@@ -12,34 +14,21 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Inter";
-  src: url("../fonts/inter-variable.woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
-  --page: #fafafa;
   --ink: #111111;
   --black: #000000;
   --sub: #666666;
-  --surface: #ededed; /* cards, pill hover, segmented track */
+  --surface: #ededed; /* cards and pill hover */
   --hairline: #d0d3d6; /* footer rules and link dividers */
-  --edge: #cacaca; /* timeline entry borders */
   --accent: #ffd454; /* email button hover */
 
+  /* mobile first; tablet and desktop values below */
+  --gutter: 16px;
   --shell: 1280px;
-
-  /* per-breakpoint, overridden below; 80px gutters from 1280px up, as designed */
-  --gutter: 20px;
+  --section-y: 80px;
   --h1: 32px;
   --h2: 24px;
-  --chip: 16px;
-  --year: 40px;
-  --cta: 28px;
-  --section-y: 48px; /* 80px from 900px up, per the design */
+  --cta: clamp(17px, 5.4vw, 28px);
 }
 
 *,
@@ -54,7 +43,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--page);
+  background: #fff;
   color: var(--ink);
   font: 400 16px/normal "Montserrat", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -87,13 +76,6 @@ ul {
 
 svg {
   display: block;
-}
-
-button {
-  font: inherit;
-  color: inherit;
-  border: 0;
-  background: none;
 }
 
 :focus-visible {
@@ -130,13 +112,13 @@ button {
 
 .site-header {
   padding-block: 24px;
+  background: #fff;
 }
 
 .site-header__inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 24px;
 }
 
 .brand {
@@ -148,15 +130,9 @@ button {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 8px;
+  margin-left: auto;
   border-radius: 100px;
   background: rgba(255, 255, 255, 0.5);
-}
-
-.nav-group__divider {
-  width: 1px;
-  height: 16px;
-  background: var(--surface);
 }
 
 .pill {
@@ -175,12 +151,6 @@ button {
   background: var(--surface);
 }
 
-.pill--active,
-.pill--active:hover {
-  background: var(--ink);
-  color: #fff;
-}
-
 .pill__icon {
   flex: none;
   display: flex;
@@ -190,10 +160,37 @@ button {
   height: 32px;
 }
 
+/* Below the tablet breakpoint both nav items collapse to their icon (the
+   design draws them as 72px icon-only pills). */
+@media (max-width: 799px) {
+  /* the two icon pills sit flush against each other, as in the mobile frame */
+  .site-header__inner {
+    gap: 8px;
+  }
+
+  .nav-group {
+    gap: 0;
+  }
+
+  .pill {
+    padding-inline: 20px;
+    gap: 0;
+  }
+
+  .pill__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* ------------------------------------------------------------- sections --- */
 
-/* Each section carries its own padding (80px in the design); the children of a
-   section sit in a 48px-gap column. Sections are flush against each other. */
+/* Each section carries its own padding; children sit in a 48px-gap column. */
 .section {
   padding-block: var(--section-y);
 }
@@ -205,21 +202,17 @@ button {
 }
 
 .hero {
-  padding-top: calc(var(--section-y) * 2);
-}
-
-.timeline {
-  padding-block: 48px;
+  padding-top: 160px;
 }
 
 .hero__title {
-  max-width: 1120px;
   font-size: var(--h1);
   font-weight: 500;
   color: var(--black);
 }
 
-/* Horizontal rails: the design overflows the content width, so these scroll. */
+/* The project row is 1400px wide against a 1120px column in every frame, so
+   it scrolls rather than being cut off. */
 .rail {
   display: flex;
   align-items: center;
@@ -279,16 +272,15 @@ button {
 
 /* ------------------------------------------------------------------ about - */
 
-/* the About block is the section's only child, so it lays out as the wrap */
 .about > .wrap {
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
 }
 
 .about__portrait {
   flex: none;
-  width: 320px;
-  height: 397px;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 320 / 397;
   border-radius: 16px;
   overflow: hidden;
   background: var(--surface);
@@ -332,7 +324,7 @@ button {
   padding: 19px 24px;
   border: 1px solid var(--ink);
   border-radius: 100px;
-  font-size: var(--chip);
+  font-size: 20px;
   color: var(--black);
   white-space: nowrap;
 }
@@ -354,7 +346,7 @@ button {
 
 .quotes__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 40px;
   align-items: stretch;
 }
@@ -427,137 +419,10 @@ button {
   background: #e3e3e3;
 }
 
-/* --------------------------------------------------------------- timeline - */
-
-.timeline__head {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  align-items: flex-start;
-}
-
-.segmented {
-  display: flex;
-  max-width: 100%;
-  padding: 2px;
-  border-radius: 1000px;
-  background: var(--surface);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.segmented::-webkit-scrollbar {
-  display: none;
-}
-
-.segmented__option {
-  flex: none;
-  padding: 8px 16px;
-  border: 1px solid transparent;
-  border-radius: 100px;
-  font-size: 16px;
-  color: var(--ink);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.segmented__option.is-selected {
-  background: #fff;
-  border-color: rgba(17, 17, 17, 0.1);
-}
-
-.timeline__track {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-}
-
-.timeline__col {
-  display: flex;
-  flex-direction: column;
-}
-
-.timeline__year {
-  display: inline-block;
-  position: relative;
-  align-self: flex-start;
-  font-size: var(--year);
-  line-height: 1.2;
-  color: var(--black);
-}
-
-/* the dot sits on the rule, centred under its year label */
-.timeline__year::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 32px);
-  width: 8px;
-  height: 8px;
-  margin-left: -4px;
-  border-radius: 50%;
-  background: var(--ink);
-}
-
-/* the rule runs behind every column; the dot sits under its year label */
-.timeline__entries {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  margin-top: 32px;
-  padding-top: 24px;
-}
-
-.timeline__entries::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 0;
-  right: -24px;
-  height: 2px;
-  background: var(--hairline);
-}
-
-.timeline__col:last-child .timeline__entries::before {
-  right: 0;
-}
-
-.entry {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 6px 4px 4px;
-  border: 1px solid var(--edge);
-  border-radius: 6px;
-  font-size: 14px;
-  color: var(--black);
-  transition: background-color 0.2s ease;
-}
-
-.entry:hover {
-  background: #fff;
-}
-
-.entry__logo {
-  flex: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  object-fit: cover;
-  background: #e3e3e3;
-}
-
-.entry__open {
-  flex: none;
-  width: 16px;
-  height: 16px;
-}
-
 /* ----------------------------------------------------------------- footer - */
 
 .site-footer {
+  padding-top: 16px;
   padding-bottom: 24px;
 }
 
@@ -571,8 +436,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  min-height: 80px;
+  gap: 16px;
+  min-height: 56px;
 }
 
 .email-cta__lines {
@@ -606,8 +471,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 160px;
-  height: 80px;
+  width: 88px;
+  height: 56px;
   border: 1px solid rgba(17, 17, 17, 0.25);
   border-radius: 1000px;
   background: var(--ink);
@@ -616,8 +481,8 @@ button {
 }
 
 .email-cta__icon svg {
-  width: 40px;
-  height: 32px;
+  width: 28px;
+  height: 22px;
   transition: transform 0.35s ease;
 }
 
@@ -641,12 +506,6 @@ button {
   min-height: 50px;
 }
 
-.footer-bar__brand,
-.footer-bar__copyright {
-  font-family: "Inter", "Montserrat", Arial, sans-serif;
-  white-space: nowrap;
-}
-
 .footer-links {
   display: flex;
   align-items: center;
@@ -657,7 +516,7 @@ button {
   display: inline-flex;
   align-items: center;
   height: 50px;
-  padding-inline: 32px;
+  padding-inline: 12px;
   border-left: 1px solid var(--hairline);
   transition: background-color 0.25s ease;
 }
@@ -666,119 +525,100 @@ button {
   background: var(--surface);
 }
 
-/* -------------------------------------------------------------- ≥ 600px --- */
-
-@media (min-width: 600px) {
-  :root {
-    --gutter: 40px;
-    --h1: 40px;
-    --h2: 28px;
-    --chip: 18px;
-    --year: 56px;
-    --cta: 36px;
-  }
-
-  .quotes__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.footer-bar__copyright {
+  white-space: nowrap;
 }
 
-/* -------------------------------------------------------------- ≥ 900px --- */
-
-@media (min-width: 900px) {
-  :root {
-    --gutter: 56px;
-    --section-y: 80px;
-  }
-
-  .quotes__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-/* ------------------------------------------------------------- ≥ 1280px --- */
-
-@media (min-width: 1280px) {
-  :root {
-    --gutter: 80px;
-    --h1: 48px;
-    --h2: 32px;
-    --chip: 20px;
-    --year: 64px;
-    --cta: 48px;
-  }
-}
-
-/* --------------------------------------------------------------- < 900px -- */
-
-@media (max-width: 899px) {
-  .about > .wrap {
-    flex-direction: column;
-  }
-
-  .about__portrait {
-    width: 100%;
-    max-width: 320px;
-  }
-
-  .timeline__track {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 40px;
-  }
-
-  .timeline__entries::before,
-  .timeline__year::after {
-    display: none;
-  }
-
-  .timeline__entries {
-    margin-top: 16px;
-    padding-top: 0;
-  }
-}
-
-/* --------------------------------------------------------------- < 800px -- */
+/* below tablet: links take their own row, the year sits centred beneath */
 
 @media (max-width: 799px) {
-  .nav-group {
-    display: none;
-  }
-
-  .email-cta__icon {
-    width: 88px;
-    height: 56px;
-  }
-
-  .email-cta__icon svg {
-    width: 28px;
-    height: 22px;
-  }
-
-  .email-cta {
-    gap: 16px;
-    min-height: 56px;
+  .footer-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
   }
 
   .footer-links {
-    order: 3;
     width: 100%;
+    flex-wrap: nowrap;
     justify-content: space-between;
   }
 
   .footer-links a {
-    padding-inline: 12px;
+    padding-inline: 8px;
+  }
+
+  .footer-bar__copyright {
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+    height: 50px;
   }
 }
 
+/* --------------------------------------------------- tablet: 800–1279px --- */
+
+@media (min-width: 800px) {
+  :root {
+    --gutter: 40px;
+    --h1: 48px;
+    --h2: 32px;
+    --cta: 32px;
+  }
+
+  .email-cta {
+    min-height: 80px;
+    gap: 24px;
+  }
+
+  .email-cta__icon {
+    width: 160px;
+    height: 80px;
+  }
+
+  .email-cta__icon svg {
+    width: 40px;
+    height: 32px;
+  }
+
+  .footer-links a {
+    padding-inline: 32px;
+  }
+}
+
+/* ------------------------------------------------------ desktop: 1280px --- */
+
+@media (min-width: 1280px) {
+  :root {
+    --gutter: 80px;
+    --cta: 48px;
+  }
+
+  /* the About block returns to two columns */
+  .about > .wrap {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  /* three testimonials side by side, on a fixed 480px card */
+  .quotes__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .quote {
+    height: 480px;
+  }
+}
+
+/* narrower than any frame in the design: let the header take two lines */
 @media (max-width: 359px) {
-  .pill--contact .pill__label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+  .site-header__inner {
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    padding-inline: 4px;
+    font-size: 14px;
   }
 }
 

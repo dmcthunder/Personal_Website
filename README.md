@@ -1,54 +1,59 @@
 # diogomaiacaetano.com
 
-Hand-built static site for **Diogo Maia Caetano**, rebuilt from the Figma
-source (`Diogo — Portfolio website`, node `29:34369`). It replaces the earlier
-capture of the published Figma Sites page: the markup, styles and assets here
-are plain HTML/CSS with no runtime, no build step and no JavaScript.
-
-## Structure
+Static site built from the Figma design file `9kiJXVlILNN8RrkUuTrEnY`
+(“🎼 JamAlong”), frame **Desktop** `15224:1424`. One page, plain HTML and CSS,
+no build step and no JavaScript.
 
 ```
-index.html          Feed (home): hero statement + six work images
-about/index.html    About: intro, portraits, bio, work experience
+index.html          The whole site
 assets/css/site.css Single stylesheet (design tokens at the top)
-assets/fonts/       Inter and Montserrat variable woff2, self-hosted
-assets/img/         Images (WebP for photography, PNG for logos)
+assets/fonts/       Montserrat and Inter variable woff2, self-hosted
+assets/img/         Images — see ASSETS.md, currently placeholders
+ASSETS.md           Which export goes in which file
 CNAME               Custom domain for GitHub Pages
-.github/workflows/  Deploys the repository root to GitHub Pages on push to main
+.github/workflows/  Deploys the repository root to Pages on push to main
 ```
+
+## Sections
+
+Navigation · hero with a project rail · about (portrait, capabilities,
+company types, industries) · “Worked with” logo rail · “In their words”
+testimonials · timeline with a segmented filter · email CTA · footer.
 
 ## Design mapping
 
-Values in `site.css` come from the Figma file rather than from eyeballing:
+Values come from the Figma frame, not from eyeballing:
 
 | Token | Value |
 | --- | --- |
-| Ink / muted / body copy | `#111111` / `#d0d3d6` / `#939899` |
-| Pill fill (hover) / accent | `#ededed` / `#ffd454` |
-| Type | Inter (400/500/700), Montserrat 500 for the email CTA |
-| Line height | 100% of the font size — `1.2102` Inter, `1.219` Montserrat |
-| Breakpoints | mobile `< 800px`, tablet `800–1279px`, desktop `>= 1280px` |
-| Hero size | 24 / 48 / 64 px |
-| Feed image height | 603 / 1267 / 980 px |
+| Page / ink / muted | `#fafafa` / `#111111` / `#666666` |
+| Surface (cards, pills) | `#ededed` |
+| Rules / entry borders | `#d0d3d6` / `#cacaca` |
+| Email button hover | `#ffd454` |
+| Type | Montserrat 400/500/700; Inter 400 for the footer name and copyright |
+| Grid | 1280px frame, 80px gutters, 48px gaps, 80px section padding |
+| Sizes | h1 48 · h2 32 · chips 20 · years 64 · email CTA 48 |
 
-Interactions are the ones defined in the file: nav and footer pills fill on
-hover, the email button turns yellow while the address slides up into view, and
-the "Next." card drops its 40% overlay.
+Interactions from the design: nav and footer pills fill on hover, the email
+button turns yellow and rotates while the address slides up into view.
 
-## Deviations from the published page
+## Known gaps
 
-* Photography is re-encoded to WebP (~28 MB of PNG → ~3 MB) and images are
-  lazy-loaded. The desktop framing is pixel-identical.
-* The mobile footer renders the email button and the social links, which the
-  design includes but the published page dropped; link padding tightens so the
-  row fits instead of overflowing the viewport.
-* On screens under 360px the "Contact" label is hidden (the icon and its
-  accessible name remain) so the header stays on one line.
+* **Images are placeholders.** The environment cannot reach `www.figma.com`, so
+  the bitmaps could not be downloaded. See `ASSETS.md` for the export list.
+* **Responsive behaviour is inferred.** Only the Desktop frame was read; the
+  breakpoints here (600 / 900 / 1280) are a sensible reflow, not the design's
+  own Tablet and Mobile frames.
+* **The timeline filter is inert.** “All / Designer / Entrepreneur / Freelancer”
+  renders as designed but filters nothing — the design does not say which entry
+  belongs to which category.
+* **The footer “Twitter” link points at `mailto:`** because that is the href in
+  the design. It needs a real handle.
+* **Rails scroll.** The project row (1400px) and the logo row (2116px) are wider
+  than the 1120px content column in the design, so both scroll horizontally.
 
 ## Local preview
 
 ```
 python3 -m http.server 8000
 ```
-
-Then open <http://localhost:8000/>.

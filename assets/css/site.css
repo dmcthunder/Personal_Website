@@ -1,16 +1,8 @@
 /* ==========================================================================
-   Diogo Maia Caetano — portfolio site
-   Values (type, spacing, colours, breakpoints) come from the Figma source.
-   Breakpoints: mobile < 800px · tablet 800–1279px · desktop >= 1280px
+   Diogo Maia Caetano — portfolio
+   Values taken from the Figma source: file 9kiJXVlILNN8RrkUuTrEnY,
+   frame "Desktop" 15224:1424 (1280px wide, 80px gutters).
    ========================================================================== */
-
-@font-face {
-  font-family: "Inter";
-  src: url("../fonts/inter-variable.woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
 
 @font-face {
   font-family: "Montserrat";
@@ -20,31 +12,34 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/inter-variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
+  --page: #fafafa;
   --ink: #111111;
-  --muted: #d0d3d6; /* de-emphasised headline words, hairlines */
-  --body: #939899; /* long-form copy */
-  --pill: #ededed; /* pill hover fill */
+  --black: #000000;
+  --sub: #666666;
+  --surface: #ededed; /* cards, pill hover, segmented track */
+  --hairline: #d0d3d6; /* footer rules and link dividers */
+  --edge: #cacaca; /* timeline entry borders */
   --accent: #ffd454; /* email button hover */
-  --card: #d9d9d9; /* image placeholder */
 
-  --lh: 1.2102; /* Inter, 100% of font size in Figma */
-  --lh-montserrat: 1.219;
-
-  --footer-gap: 24px;
-  --content-gap: 8px;
   --shell: 1280px;
-  --page-pad: 16px;
-  --flush: 16px; /* pull-back for pills that sit flush with the content edge */
-  --gap: 24px;
-  --radius-card: 16px;
 
-  /* per-breakpoint values, overridden below */
-  --hero-size: 24px;
-  --feed-height: 603px;
-  --cta-size: clamp(18px, 5.6vw, 32px);
-  --section-size: 20px;
-  --col-gap: 8px;
+  /* per-breakpoint, overridden below; 80px gutters from 1280px up, as designed */
+  --gutter: 20px;
+  --h1: 32px;
+  --h2: 24px;
+  --chip: 16px;
+  --year: 40px;
+  --cta: 28px;
+  --section-y: 48px; /* 80px from 900px up, per the design */
 }
 
 *,
@@ -59,11 +54,10 @@ html {
 
 body {
   margin: 0;
-  background: #fff;
+  background: var(--page);
   color: var(--ink);
-  font: 400 16px/var(--lh) "Inter", "Helvetica Neue", Arial, sans-serif;
+  font: 400 16px/normal "Montserrat", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 img {
@@ -78,12 +72,28 @@ a {
 
 h1,
 h2,
-p {
+h3,
+p,
+figure,
+blockquote {
   margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 svg {
   display: block;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
 }
 
 :focus-visible {
@@ -92,11 +102,11 @@ svg {
   border-radius: 4px;
 }
 
-.shell {
+.wrap {
   width: 100%;
   max-width: var(--shell);
   margin-inline: auto;
-  padding-inline: var(--page-pad);
+  padding-inline: var(--gutter);
 }
 
 .visually-hidden {
@@ -110,53 +120,13 @@ svg {
   white-space: nowrap;
 }
 
-/* --------------------------------------------------------------- pills --- */
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 50px;
-  padding: 10px 20px;
-  border-radius: 1000px;
-  font-size: 16px;
-  line-height: var(--lh);
-  white-space: nowrap;
-  background: transparent;
-  transition: background-color 0.25s ease, color 0.25s ease;
+.h2 {
+  font-size: var(--h2);
+  font-weight: 500;
+  color: var(--black);
 }
 
-.pill:hover {
-  background: var(--pill);
-}
-
-.pill.is-current,
-.pill.is-current:hover {
-  background: var(--ink);
-  color: #fff;
-}
-
-/* Brand and year sit flush with the content edge in the design, so the pill
-   padding is pulled back out on the outer side. */
-.pill--flush-start {
-  margin-left: calc(var(--flush) * -1);
-  font-weight: 700;
-}
-
-.pill--flush-end {
-  margin-right: calc(var(--flush) * -1);
-}
-
-.pill__icon {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-}
-
-/* ------------------------------------------------------------ navigation - */
+/* ----------------------------------------------------------- navigation --- */
 
 .site-header {
   padding-block: 24px;
@@ -169,148 +139,432 @@ svg {
   gap: 16px;
 }
 
+.brand {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .nav-group {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 16px;
   padding: 8px;
   border-radius: 100px;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .nav-group__divider {
-  flex: none;
   width: 1px;
   height: 16px;
-  background: var(--pill);
+  background: var(--surface);
 }
 
-/* ------------------------------------------------------------------ hero - */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 10px 20px;
+  border-radius: 1000px;
+  white-space: nowrap;
+  background: transparent;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.pill:hover {
+  background: var(--surface);
+}
+
+.pill--active,
+.pill--active:hover {
+  background: var(--ink);
+  color: #fff;
+}
+
+.pill__icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+/* ------------------------------------------------------------- sections --- */
+
+/* Each section carries its own padding (80px in the design); the children of a
+   section sit in a 48px-gap column. Sections are flush against each other. */
+.section {
+  padding-block: var(--section-y);
+}
+
+.section > .wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
 
 .hero {
-  font-size: var(--hero-size);
+  padding-top: calc(var(--section-y) * 2);
+}
+
+.timeline {
+  padding-block: 48px;
+}
+
+.hero__title {
+  max-width: 1120px;
+  font-size: var(--h1);
   font-weight: 500;
-  line-height: var(--lh);
-  letter-spacing: 0;
+  color: var(--black);
 }
 
-.hero .quiet,
-.next-card__label .quiet {
-  color: var(--muted);
+/* Horizontal rails: the design overflows the content width, so these scroll. */
+.rail {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
 }
 
-/* ------------------------------------------------------------------ feed - */
-
-.feed {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--gap);
-  margin-top: var(--gap);
+.rail > * {
+  scroll-snap-align: start;
 }
 
-.feed__item {
-  display: block;
-  height: var(--feed-height);
-  border-radius: var(--radius-card);
+.work {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 320px;
+  padding: 16px 16px 23px;
+  border-radius: 16px;
+  background: var(--surface);
   overflow: hidden;
-  background: var(--card);
 }
 
-.feed__item img {
+.work__thumb {
+  border-radius: 8px;
+  overflow: hidden;
+  background: #e3e3e3;
+}
+
+.work__thumb img {
+  width: 288px;
+  height: 288px;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.work__text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.work__name {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.work__desc {
+  font-size: 14px;
+  color: var(--sub);
+}
+
+/* ------------------------------------------------------------------ about - */
+
+/* the About block is the section's only child, so it lays out as the wrap */
+.about > .wrap {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.about__portrait {
+  flex: none;
+  width: 320px;
+  height: 397px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.about__portrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* -------------------------------------------------------------- about page */
-
-.intro {
-  display: grid;
-  gap: var(--gap);
-}
-
-.portraits {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.portraits img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: var(--radius-card);
-  background: var(--card);
-}
-
-.split {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: var(--col-gap);
-  row-gap: 10px;
-  margin-top: 16px;
-}
-
-.split__title {
-  font-size: var(--section-size);
-  font-weight: 500;
-  line-height: var(--lh);
-  color: #000;
-}
-
-/* right-aligned from tablet up; the mobile design keeps it flush left */
-
-.prose {
-  display: grid;
-  gap: 1em;
-  font-size: 14px;
-  line-height: var(--lh);
-  color: var(--body);
-}
-
-.roles {
-  display: grid;
+.about__text {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
   gap: 32px;
 }
 
-.role {
-  display: grid;
+.taxonomy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.taxonomy__label {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--black);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
-.role__logo {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 8px;
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 19px 24px;
+  border: 1px solid var(--ink);
+  border-radius: 100px;
+  font-size: var(--chip);
+  color: var(--black);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- clients - */
+
+.rail--logos {
+  gap: 48px;
+  opacity: 0.5;
+}
+
+.logo {
+  flex: none;
   object-fit: contain;
+  filter: grayscale(1);
 }
 
-.role__title,
-.role__meta {
+/* ----------------------------------------------------------------- quotes - */
+
+.quotes__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  align-items: stretch;
+}
+
+.quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 16px 23px;
+  border-radius: 16px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.quote__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.quote__who {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.quote__company {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 100px;
+  object-fit: cover;
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+}
+
+.quote__person {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.quote__names {
+  text-align: right;
+}
+
+.quote__name {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.quote__role {
   font-size: 14px;
-  font-weight: 700;
-  line-height: var(--lh);
+  color: var(--sub);
 }
 
-/* ---------------------------------------------------------------- footer - */
-
-.page-content {
-  margin-top: var(--content-gap);
+.quote__avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 1000px;
+  object-fit: cover;
+  background: #e3e3e3;
 }
+
+/* --------------------------------------------------------------- timeline - */
+
+.timeline__head {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.segmented {
+  display: flex;
+  max-width: 100%;
+  padding: 2px;
+  border-radius: 1000px;
+  background: var(--surface);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.segmented::-webkit-scrollbar {
+  display: none;
+}
+
+.segmented__option {
+  flex: none;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 100px;
+  font-size: 16px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.segmented__option.is-selected {
+  background: #fff;
+  border-color: rgba(17, 17, 17, 0.1);
+}
+
+.timeline__track {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.timeline__col {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline__year {
+  display: inline-block;
+  position: relative;
+  align-self: flex-start;
+  font-size: var(--year);
+  line-height: 1.2;
+  color: var(--black);
+}
+
+/* the dot sits on the rule, centred under its year label */
+.timeline__year::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 32px);
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+/* the rule runs behind every column; the dot sits under its year label */
+.timeline__entries {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 32px;
+  padding-top: 24px;
+}
+
+.timeline__entries::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: -24px;
+  height: 2px;
+  background: var(--hairline);
+}
+
+.timeline__col:last-child .timeline__entries::before {
+  right: 0;
+}
+
+.entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px 4px 4px;
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--black);
+  transition: background-color 0.2s ease;
+}
+
+.entry:hover {
+  background: #fff;
+}
+
+.entry__logo {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  object-fit: cover;
+  background: #e3e3e3;
+}
+
+.entry__open {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+/* ----------------------------------------------------------------- footer - */
 
 .site-footer {
-  margin-top: var(--footer-gap);
   padding-bottom: 24px;
-}
-
-.page-about {
-  --footer-gap: 16px;
 }
 
 .email-cta-wrap {
   padding-block: 24px;
-  border-top: 1px solid var(--muted);
-  border-bottom: 1px solid var(--muted);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
 }
 
 .email-cta {
@@ -324,16 +578,15 @@ svg {
 .email-cta__lines {
   min-width: 0;
   overflow: hidden;
-  height: calc(var(--cta-size) * var(--lh-montserrat));
-  font-family: "Montserrat", "Inter", Arial, sans-serif;
-  font-size: var(--cta-size);
+  height: calc(var(--cta) * 1.22);
+  font-size: var(--cta);
   font-weight: 500;
-  line-height: var(--lh-montserrat);
+  color: var(--ink);
 }
 
 .email-cta__lines span {
   display: block;
-  height: calc(var(--cta-size) * var(--lh-montserrat));
+  height: calc(var(--cta) * 1.22);
   white-space: nowrap;
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -342,10 +595,10 @@ svg {
   margin-top: 8px;
 }
 
-/* the second line (the address) slides into view on hover */
+/* the address slides up into view on hover */
 .email-cta:hover .email-cta__lines span,
 .email-cta:focus-visible .email-cta__lines span {
-  transform: translateY(calc((var(--cta-size) * var(--lh-montserrat) + 8px) * -1));
+  transform: translateY(calc((var(--cta) * 1.22 + 8px) * -1));
 }
 
 .email-cta__icon {
@@ -355,7 +608,8 @@ svg {
   justify-content: center;
   width: 160px;
   height: 80px;
-  border-radius: 100px;
+  border: 1px solid rgba(17, 17, 17, 0.25);
+  border-radius: 1000px;
   background: var(--ink);
   color: #fff;
   transition: background-color 0.35s ease, color 0.35s ease;
@@ -375,7 +629,7 @@ svg {
 
 .email-cta:hover .email-cta__icon svg,
 .email-cta:focus-visible .email-cta__icon svg {
-  transform: scale(1.237);
+  transform: rotate(-16deg) scale(1.237);
 }
 
 .footer-bar {
@@ -385,6 +639,12 @@ svg {
   flex-wrap: wrap;
   gap: 8px;
   min-height: 50px;
+}
+
+.footer-bar__brand,
+.footer-bar__copyright {
+  font-family: "Inter", "Montserrat", Arial, sans-serif;
+  white-space: nowrap;
 }
 
 .footer-links {
@@ -398,130 +658,92 @@ svg {
   align-items: center;
   height: 50px;
   padding-inline: 32px;
-  border-left: 1px solid var(--muted);
-  font-size: 16px;
-  line-height: var(--lh);
+  border-left: 1px solid var(--hairline);
   transition: background-color 0.25s ease;
 }
 
 .footer-links a:hover {
-  background: var(--pill);
+  background: var(--surface);
 }
 
-/* next-page card */
+/* -------------------------------------------------------------- ≥ 600px --- */
 
-.next-card {
-  position: relative;
-  display: block;
-  height: 480px;
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  background: var(--card);
-  isolation: isolate;
-}
-
-/* The image keeps a fixed size inside the clipped card, exactly as the design
-   places it, so narrow cards show a tighter crop instead of a wider view. */
-.next-card img {
-  position: absolute;
-  top: var(--card-img-top);
-  left: 50%;
-  width: var(--card-img-w);
-  height: var(--card-img-h);
-  max-width: none;
-  transform: translateX(-50%);
-  object-fit: cover;
-}
-
-.next-card--about {
-  --card-img-w: 1280px;
-  --card-img-h: 1920px;
-  --card-img-top: -101px;
-}
-
-.next-card--portfolio {
-  --card-img-w: 1279px;
-  --card-img-h: 730px;
-  --card-img-top: -126px;
-}
-
-.next-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(17, 17, 17, 0.4);
-  transition: opacity 0.4s ease;
-}
-
-.next-card:hover::after,
-.next-card:focus-visible::after {
-  opacity: 0;
-}
-
-.next-card__label {
-  position: absolute;
-  top: 32px;
-  left: 32px;
-  display: flex;
-  flex-direction: column;
-  font-size: 64px;
-  font-weight: 500;
-  line-height: var(--lh);
-}
-
-/* ------------------------------------------------------------- tablet up - */
-
-@media (min-width: 800px) {
+@media (min-width: 600px) {
   :root {
-    --page-pad: 24px;
-    --flush: 20px;
-    --content-gap: 24px;
-    --hero-size: 48px;
-    --feed-height: 1267px;
-    --cta-size: 32px;
-    --section-size: 32px;
-    --col-gap: 48px;
+    --gutter: 40px;
+    --h1: 40px;
+    --h2: 28px;
+    --chip: 18px;
+    --year: 56px;
+    --cta: 36px;
   }
 
-  .nav-group {
-    display: flex;
-  }
-
-  .split__title--end {
-    text-align: right;
-  }
-
-  .next-card__label {
-    flex-direction: row;
+  .quotes__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* ------------------------------------------------------------ desktop up - */
+/* -------------------------------------------------------------- ≥ 900px --- */
+
+@media (min-width: 900px) {
+  :root {
+    --gutter: 56px;
+    --section-y: 80px;
+  }
+
+  .quotes__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ------------------------------------------------------------- ≥ 1280px --- */
 
 @media (min-width: 1280px) {
   :root {
-    --hero-size: 64px;
-    --feed-height: 980px;
-    --cta-size: 48px;
+    --gutter: 80px;
+    --h1: 48px;
+    --h2: 32px;
+    --chip: 20px;
+    --year: 64px;
+    --cta: 48px;
   }
 }
 
-/* --------------------------------------------------------- mobile only --- */
+/* --------------------------------------------------------------- < 900px -- */
 
-@media (max-width: 359px) {
-  /* keep the header on one line on very narrow screens */
-  .pill--contact .pill__label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+@media (max-width: 899px) {
+  .about > .wrap {
+    flex-direction: column;
+  }
+
+  .about__portrait {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .timeline__track {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .timeline__entries::before,
+  .timeline__year::after {
+    display: none;
+  }
+
+  .timeline__entries {
+    margin-top: 16px;
+    padding-top: 0;
   }
 }
+
+/* --------------------------------------------------------------- < 800px -- */
 
 @media (max-width: 799px) {
+  .nav-group {
+    display: none;
+  }
+
   .email-cta__icon {
     width: 88px;
     height: 56px;
@@ -537,10 +759,6 @@ svg {
     min-height: 56px;
   }
 
-  .footer-bar {
-    flex-wrap: wrap;
-  }
-
   .footer-links {
     order: 3;
     width: 100%;
@@ -549,6 +767,18 @@ svg {
 
   .footer-links a {
     padding-inline: 12px;
+  }
+}
+
+@media (max-width: 359px) {
+  .pill--contact .pill__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 

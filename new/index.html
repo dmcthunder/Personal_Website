@@ -77,7 +77,8 @@
             <rect width="100%" height="100%" fill="url(#hero-grid)" />
           </svg>
         </div>
-        <div class="wrap hero-copy">
+        <div class="wrap hero-layout">
+          <div class="hero-copy">
           <!-- PHOTO SLOT: replace assets/avatar.svg with a square portrait. -->
           <img
             class="avatar"
@@ -93,6 +94,24 @@
             <a class="btn btn-primary" href="#work">View work</a>
             <a class="btn btn-secondary" href="#contact">Get in touch</a>
           </div>
+          </div>
+          <div class="hero-system" aria-hidden="true">
+            <svg viewBox="0 0 460 520" xmlns="http://www.w3.org/2000/svg">
+              <rect x="24" y="28" width="412" height="464" rx="28" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.28)"/>
+              <rect x="48" y="56" width="168" height="96" rx="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.34)"/>
+              <rect x="232" y="56" width="176" height="96" rx="16" fill="none" stroke="rgba(255,255,255,0.22)"/>
+              <rect x="64" y="80" width="88" height="8" rx="4" fill="#fff" opacity="0.85"/>
+              <rect x="64" y="98" width="56" height="6" rx="3" fill="#fff" opacity="0.35"/>
+              <rect x="48" y="176" width="360" height="176" rx="18" fill="none" stroke="rgba(255,255,255,0.3)"/>
+              <path class="draw" d="M72 310 C 140 230, 210 300, 280 220 S 390 180, 392 250" fill="none" stroke="#fff" stroke-width="1.6"/>
+              <circle cx="72" cy="310" r="4" fill="#fff"/>
+              <circle cx="280" cy="220" r="5" fill="#fff"/>
+              <circle cx="392" cy="250" r="4" fill="#fff" opacity="0.7"/>
+              <rect x="48" y="376" width="108" height="80" rx="14" fill="none" stroke="rgba(255,255,255,0.28)"/>
+              <rect x="168" y="376" width="108" height="80" rx="14" fill="none" stroke="rgba(255,255,255,0.28)"/>
+              <rect x="288" y="376" width="120" height="80" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.4)"/>
+            </svg>
+          </div>
         </div>
       </section>
 
@@ -100,7 +119,7 @@
         <div class="wrap">
           <h2 class="kicker" id="proof-heading">Worked with</h2>
           <p class="proof-lead">
-            Based in Lisbon. 11+ years as a designer, mentor, and entrepreneur. More than half of that career at unicorns and NYSE-listed companies.
+            Based in Lisbon. 11+ years as a designer, mentor, and entrepreneur, with unicorns and NYSE-listed companies in the work as well as early teams.
           </p>
           <ul class="industries" aria-label="Industries">
             <li>Health</li>
@@ -158,26 +177,38 @@
                   The CSS mock hides once the image is shown.
                 -->
                 <img class="case-photo" src="assets/feedzai.svg" alt="Feedzai product screenshot" width="1200" height="800" hidden />
-                <div class="mock mock-feedzai" aria-hidden="true">
-                  <div class="mock-dots"><span></span><span></span><span></span></div>
-                  <div class="mock-layout">
-                    <div class="mock-side"><span></span><span></span><span></span><span></span></div>
-                    <div class="mock-main">
-                      <div class="kpi-row"><span class="kpi"></span><span class="kpi"></span><span class="kpi"></span></div>
-                      <div class="panel">
-                        <svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true">
-                          <polyline points="0,62 28,50 52,54 78,28 108,36 136,16 164,24 200,10" />
-                        </svg>
-                      </div>
-                      <div class="bars"><span></span><span></span><span></span></div>
-                    </div>
-                  </div>
+                <div class="scene scene-feedzai" aria-hidden="true">
+                  <svg viewBox="0 0 440 520" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="440" height="520" fill="#14161f"/>
+                    <circle cx="36" cy="32" r="4" fill="#d5dbf6"/>
+                    <circle cx="52" cy="32" r="4" fill="#d5dbf6" opacity="0.45"/>
+                    <circle cx="68" cy="32" r="4" fill="#d5dbf6" opacity="0.22"/>
+                    <rect x="28" y="56" width="72" height="420" rx="12" fill="#1c1f2c"/>
+                    <rect x="44" y="78" width="40" height="6" rx="3" fill="#d5dbf6"/>
+                    <rect x="44" y="98" width="28" height="6" rx="3" fill="#fff" opacity="0.28"/>
+                    <rect x="44" y="118" width="34" height="6" rx="3" fill="#fff" opacity="0.18"/>
+                    <rect x="44" y="150" width="40" height="6" rx="3" fill="#fff" opacity="0.18"/>
+                    <path class="draw" d="M140 150 C 190 90, 230 190, 280 120 S 360 70, 400 130" fill="none" stroke="#d5dbf6" stroke-width="1.75"/>
+                    <path d="M130 230 C 190 190, 240 260, 300 210 S 370 180, 410 220" fill="none" stroke="#d5dbf6" stroke-width="1.25" opacity="0.4"/>
+                    <circle cx="140" cy="150" r="5" fill="#d5dbf6"/>
+                    <circle cx="280" cy="120" r="7" fill="#d5dbf6"/>
+                    <circle cx="400" cy="130" r="4.5" fill="#fff"/>
+                    <circle cx="300" cy="210" r="4" fill="#d5dbf6" opacity="0.7"/>
+                    <rect x="120" y="300" width="292" height="56" rx="12" fill="#1c1f2c"/>
+                    <rect x="138" y="320" width="110" height="8" rx="4" fill="#d5dbf6" opacity="0.9"/>
+                    <rect x="138" y="336" width="64" height="6" rx="3" fill="#fff" opacity="0.28"/>
+                    <rect x="120" y="370" width="292" height="56" rx="12" fill="#1c1f2c"/>
+                    <rect x="138" y="390" width="86" height="8" rx="4" fill="#fff" opacity="0.75"/>
+                    <rect x="138" y="406" width="140" height="6" rx="3" fill="#fff" opacity="0.22"/>
+                    <rect x="120" y="440" width="292" height="44" rx="12" fill="#1c1f2c"/>
+                    <rect x="138" y="458" width="160" height="8" rx="4" fill="#d5dbf6" opacity="0.55"/>
+                  </svg>
                 </div>
               </figure>
-              <ul class="metrics">
-                <li>Established the Design System foundation and new components used by a <strong>200+</strong> person product organization.</li>
-                <li>Improved design consistency, reducing development handoff time by <strong>50%</strong>.</li>
-                <li>Enhanced platform usability, leading to <strong>35%</strong> faster feature delivery.</li>
+              <ul class="outcomes">
+                <li><strong>Real-time risk.</strong> Banks and merchants need fraud and compliance decisions while commerce is happening, and a large product organization has to design that together.</li>
+                <li><strong>The foundation.</strong> I established the Design System and shaped the new components teams use across the platform.</li>
+                <li><strong>Easier to ship.</strong> The product became more consistent, handoff into development became clearer, and the platform became easier to use, so features move through delivery with less friction.</li>
               </ul>
               <a class="see" href="#" aria-label="See the Feedzai case study">See here <span aria-hidden="true">↗</span></a>
             </article>
@@ -203,16 +234,30 @@
                   The CSS mock hides once the image is shown.
                 -->
                 <img class="case-photo" src="assets/8x8.svg" alt="8x8 product screenshot" width="1200" height="800" hidden />
-                <div class="mock mock-eight" aria-hidden="true">
-                  <div class="mock-dots"><span></span><span></span><span></span></div>
-                  <div class="mock-tiles"><span></span><span></span><span></span><span></span></div>
-                  <div class="mock-controls"></div>
+                <div class="scene scene-eight" aria-hidden="true">
+                  <svg viewBox="0 0 440 520" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="440" height="520" fill="#2a241c"/>
+                    <rect x="28" y="28" width="184" height="168" rx="18" fill="#1a1612"/>
+                    <rect x="228" y="28" width="184" height="168" rx="18" fill="#3a3228"/>
+                    <rect x="28" y="212" width="184" height="168" rx="18" fill="#3a3228"/>
+                    <rect x="228" y="212" width="184" height="168" rx="18" fill="#1a1612"/>
+                    <circle cx="120" cy="112" r="28" fill="none" stroke="#f3eee6" stroke-width="1.5"/>
+                    <circle cx="120" cy="112" r="6" fill="#f3eee6"/>
+                    <circle cx="320" cy="296" r="28" fill="none" stroke="#f3eee6" stroke-width="1.5" opacity="0.7"/>
+                    <path class="draw" d="M36 430 C 80 400, 110 460, 160 420 S 230 380, 280 430 S 360 470, 404 410" fill="none" stroke="#f3eee6" stroke-width="1.75"/>
+                    <rect x="150" y="468" width="140" height="28" rx="14" fill="#1a1612"/>
+                    <circle cx="176" cy="482" r="5" fill="#f3eee6"/>
+                    <circle cx="198" cy="482" r="5" fill="#f3eee6" opacity="0.45"/>
+                    <circle cx="220" cy="482" r="5" fill="#f3eee6" opacity="0.45"/>
+                    <rect x="242" y="476" width="28" height="12" rx="6" fill="#f3eee6"/>
+                  </svg>
                 </div>
               </figure>
-              <ul class="metrics">
-                <li>"Store of the Future" concept expected to reduce integrated acquisition time by <strong>60%</strong> and increase adoption rate by <strong>45%</strong>.</li>
-                <li>Google Workspace Integration improved user productivity by <strong>30%</strong>, serving <strong>10,000+</strong> enterprise users.</li>
-                <li>Delivered solutions used by <strong>50,000+</strong> end users across client organizations.</li>
+              <ul class="outcomes">
+                <li><strong>One place for the conversation.</strong> Voice, video, chat, and the contact center needed to feel like a single product, including the path a company takes to adopt it.</li>
+                <li><strong>Store of the Future.</strong> I shaped that concept so the integrated offer could be acquired more simply, and so adoption could spread further inside a company.</li>
+                <li><strong>Already open.</strong> The Google Workspace Integration lets enterprise teams stay in the tools they use and still get more done.</li>
+                <li><strong>Out with clients.</strong> The solutions shipped into client organizations, for the people working inside them.</li>
               </ul>
               <a class="see" href="#" aria-label="See the 8x8 case study">See here <span aria-hidden="true">↗</span></a>
             </article>
@@ -238,19 +283,30 @@
                   The CSS mock hides once the image is shown.
                 -->
                 <img class="case-photo" src="assets/sensei.svg" alt="Sensei product screenshot" width="1200" height="800" hidden />
-                <div class="mock mock-retail" aria-hidden="true">
-                  <div class="phone" aria-hidden="true">
-                    <div class="phone-screen"><span></span><span></span><span></span></div>
-                  </div>
-                  <div class="shelf"><span></span><span></span><span></span><span></span></div>
+                <div class="scene scene-sensei" aria-hidden="true">
+                  <svg viewBox="0 0 440 520" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="440" height="520" fill="#f7f6ee"/>
+                    <path d="M40 80 H400 M40 150 H400 M40 220 H400 M40 290 H400" stroke="#1a1a1a" stroke-opacity="0.18"/>
+                    <rect x="56" y="96" width="70" height="40" rx="8" fill="#1a1a1a"/>
+                    <rect x="150" y="96" width="70" height="40" rx="8" fill="#e5f28a" stroke="#1a1a1a" stroke-opacity="0.35"/>
+                    <rect x="244" y="96" width="70" height="40" rx="8" fill="#1a1a1a"/>
+                    <rect x="56" y="166" width="70" height="40" rx="8" fill="#e5f28a" stroke="#1a1a1a" stroke-opacity="0.35"/>
+                    <rect x="150" y="166" width="70" height="40" rx="8" fill="#1a1a1a"/>
+                    <rect x="244" y="236" width="120" height="40" rx="8" fill="#1a1a1a"/>
+                    <rect x="250" y="250" width="150" height="230" rx="28" fill="#141414"/>
+                    <rect x="264" y="268" width="122" height="196" rx="16" fill="#f7f6ee"/>
+                    <rect x="278" y="286" width="94" height="36" rx="8" fill="#1a1a1a"/>
+                    <rect x="278" y="332" width="94" height="22" rx="6" fill="#e5f28a"/>
+                    <rect x="278" y="362" width="70" height="22" rx="6" fill="#e4e1d4"/>
+                    <rect x="278" y="392" width="94" height="22" rx="6" fill="#e4e1d4"/>
+                    <circle cx="325" cy="444" r="8" fill="#1a1a1a"/>
+                  </svg>
                 </div>
               </figure>
-              <ul class="metrics">
-                <li>Directly involved in creating the product for the first autonomous pharmacy in Europe.</li>
-                <li>Design System adopted across all <strong>6</strong> products.</li>
-                <li>Increased in-store staff task efficiency by <strong>40%</strong>.</li>
-                <li>Improved user satisfaction score by <strong>25%</strong>.</li>
-                <li>Complete redesign of the web app and mobile app.</li>
+              <ul class="outcomes">
+                <li><strong>The first autonomous pharmacy in Europe.</strong> I was directly involved in creating that product.</li>
+                <li><strong>Web and mobile, redesigned.</strong> I redesigned both apps, and the Design System was adopted across the products.</li>
+                <li><strong>Easier on the floor.</strong> In-store staff could get through their tasks with less effort, and people came away more satisfied.</li>
               </ul>
               <a class="see" href="#" aria-label="See the Sensei case study">See here <span aria-hidden="true">↗</span></a>
             </article>
@@ -276,18 +332,29 @@
                   The CSS mock hides once the image is shown.
                 -->
                 <img class="case-photo" src="assets/papersoft.svg" alt="Papersoft product screenshot" width="1200" height="800" hidden />
-                <div class="mock mock-app" aria-hidden="true">
-                  <div class="device">
-                    <div class="device-screen">
-                      <span></span><span></span><span></span><span></span><span></span>
-                    </div>
-                  </div>
+                <div class="scene scene-papersoft" aria-hidden="true">
+                  <svg viewBox="0 0 440 520" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="440" height="520" fill="#1287a8"/>
+                    <path class="draw" d="M40 120 C 90 60, 130 150, 180 100 S 250 40, 300 110 S 380 180, 410 90" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="5 7" opacity="0.85"/>
+                    <circle cx="40" cy="120" r="5" fill="#fff"/>
+                    <circle cx="180" cy="100" r="5" fill="#fff"/>
+                    <circle cx="300" cy="110" r="5" fill="#fff"/>
+                    <circle cx="410" cy="90" r="5" fill="#fff"/>
+                    <rect x="145" y="150" width="150" height="300" rx="28" fill="#0d1c22"/>
+                    <rect x="157" y="166" width="126" height="268" rx="18" fill="#e9f8fc"/>
+                    <rect x="172" y="186" width="52" height="8" rx="4" fill="#0d1c22"/>
+                    <rect x="172" y="210" width="96" height="48" rx="10" fill="#0d1c22"/>
+                    <rect x="172" y="270" width="96" height="22" rx="7" fill="#9fe0ee"/>
+                    <rect x="172" y="302" width="96" height="22" rx="7" fill="#9fe0ee"/>
+                    <rect x="172" y="334" width="72" height="22" rx="7" fill="#c5edf4"/>
+                    <rect x="172" y="380" width="96" height="28" rx="14" fill="#0d1c22"/>
+                  </svg>
                 </div>
               </figure>
-              <ul class="metrics">
-                <li>Built an offline-first Super-App serving <strong>100,000+</strong> users in low-connectivity markets.</li>
-                <li>Increased user completion rate of financial operations by <strong>55%</strong>.</li>
-                <li>Successful launch on Google Play Store with positive adoption in target African markets.</li>
+              <ul class="outcomes">
+                <li><strong>Where the signal drops.</strong> Agency banking has to keep working in low-connectivity markets, from KYC and agent management to the financial services people need.</li>
+                <li><strong>Offline-first Super-App.</strong> I built the app so an agent can start a financial operation and still finish it when the connection fails.</li>
+                <li><strong>In market.</strong> More of those operations get completed, and the app launched on the Google Play Store with positive adoption in the target African markets.</li>
               </ul>
               <a class="see" href="#" aria-label="See the Papersoft case study">See here <span aria-hidden="true">↗</span></a>
             </article>
@@ -304,10 +371,10 @@
                 <li>B2B</li>
               </ul>
             </div>
-            <ul class="metrics">
-              <li>Supported <strong>5,000+</strong> users across clinical and commercial teams.</li>
-              <li>Improved workflow efficiency by <strong>35-45%</strong>.</li>
-              <li>Reduced task completion time by <strong>28%</strong>.</li>
+            <ul class="outcomes">
+              <li><strong>Clinical and commercial.</strong> I supported both teams on the web workflows they share.</li>
+              <li><strong>A UI kit they can reuse.</strong> Shared interface pieces, so the work stays consistent from one task to the next.</li>
+              <li><strong>Less effort in the day.</strong> Workflows took less effort, and common tasks took less time to finish.</li>
             </ul>
           </article>
         </div>
@@ -327,7 +394,12 @@
             <p><a class="link" href="#">Jammin'</a></p>
           </div>
           <div class="jam-visual" data-reveal aria-hidden="true">
-            <div class="jam-lines"><span></span><span></span><span></span><span></span></div>
+            <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="170" cy="180" r="78" fill="none" stroke="#fff" stroke-width="10"/>
+              <circle cx="170" cy="180" r="28" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="8"/>
+              <circle cx="310" cy="180" r="78" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="10"/>
+              <path class="draw" d="M70 250 C 130 210, 180 280, 240 230 S 340 190, 420 240" fill="none" stroke="#fff" stroke-width="1.6"/>
+            </svg>
           </div>
         </div>
       </section>
@@ -335,6 +407,7 @@
       <section class="section method" aria-labelledby="method-heading">
         <div class="wrap">
           <h2 id="method-heading" data-reveal>How I work</h2>
+          <p class="section-lead" data-reveal>Simplify the workflow. Give the team a system they can share. Decide from research, with the business goal in the room.</p>
           <ol class="principles">
             <li data-reveal>
               <span class="num">01</span>

@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- ICON SLOT contact: replace this file. -->
+  <!-- ICON SLOT contact: red and yellow mailbox. Replace this file. -->
   <rect width="64" height="64" rx="16" fill="#f4efe2"/>
-  <rect x="12" y="18" width="40" height="28" rx="4" fill="#111"/>
-  <path d="M14 20l18 14L50 20" fill="none" stroke="#ffe14a" stroke-width="3"/>
+  <rect x="14" y="22" width="30" height="22" rx="4" fill="#e23d3d"/>
+  <path d="M14 24l15 12 15-12" fill="none" stroke="#fff" stroke-width="2"/>
+  <rect x="44" y="16" width="6" height="16" rx="1" fill="#f0c400"/>
+  <rect x="28" y="44" width="4" height="8" fill="#7a5a32"/>
 </svg>

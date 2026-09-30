@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240">
+  <!-- ROCKET SLOT: faded art inside the resume window. Replace this file. -->
+  <path d="M100 12c28 28 40 70 40 112v18H60v-18C60 82 72 40 100 12z" fill="#f7f4ee"/>
+  <circle cx="100" cy="78" r="14" fill="#ff4d94"/>
+  <path d="M60 130l-22 36h28l-6-36zM140 130l22 36h-28l6-36z" fill="#ffe14a"/>
+  <path d="M88 148h24l-6 36h-12l-6-36z" fill="#ffb020"/>
+</svg>

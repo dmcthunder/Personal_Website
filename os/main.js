@@ -4,6 +4,10 @@
   var windows = Array.prototype.slice.call(document.querySelectorAll(".window"));
   var z = 20;
 
+  document.querySelectorAll("[data-tip]").forEach(function (el) {
+    el.title = el.getAttribute("data-tip");
+  });
+
   function isSheet() {
     return sheetQuery.matches;
   }
@@ -12,14 +16,17 @@
     return reduceQuery.matches;
   }
 
+  function launcher(id) {
+    return document.querySelector('#dock [data-open="' + id + '"]') || document.querySelector('.work-rail [data-open="' + id + '"]');
+  }
+
   function syncChrome() {
     windows.forEach(function (win) {
       var open = win.classList.contains("is-open");
       var minimised = win.classList.contains("is-minimized");
       document.querySelectorAll('[data-open="' + win.id + '"]').forEach(function (btn) {
-        var running = open;
-        btn.setAttribute("aria-pressed", running ? "true" : "false");
-        btn.classList.toggle("is-running", running);
+        btn.setAttribute("aria-pressed", open ? "true" : "false");
+        btn.classList.toggle("is-running", open);
         btn.classList.toggle("is-minimized", minimised);
       });
       if (isSheet() && win.classList.contains("is-front") && open) {
@@ -30,13 +37,7 @@
         win.removeAttribute("aria-modal");
       }
     });
-    var anyFront = document.querySelector(".window.is-open.is-front");
-    document.body.classList.toggle("has-sheet", Boolean(isSheet() && anyFront));
-    var active = activeWindow();
-    document.querySelectorAll(".topbar [data-open]").forEach(function (btn) {
-      if (active && btn.getAttribute("data-open") === active.id) btn.setAttribute("aria-current", "page");
-      else btn.removeAttribute("aria-current");
-    });
+    document.body.classList.toggle("has-sheet", Boolean(isSheet() && document.querySelector(".window.is-open.is-front")));
   }
 
   function activeWindow() {
@@ -72,6 +73,7 @@
       win.style.left = "";
       win.style.top = "";
       win.style.right = "";
+      win.style.margin = "0";
     }
     win.classList.remove("is-minimized", "is-closing");
     win.classList.add("is-open");
@@ -109,28 +111,27 @@
 
   function minimise(win) {
     if (isSheet()) {
-      closeWindow(win, document.querySelector('#dock [data-open="' + win.id + '"]'));
+      closeWindow(win, launcher(win.id));
       return;
     }
     win.classList.add("is-minimized");
     win.classList.remove("is-active");
     syncChrome();
-    var dockBtn = document.querySelector('#dock [data-open="' + win.id + '"]');
-    if (dockBtn) dockBtn.focus();
+    var btn = launcher(win.id);
+    if (btn) btn.focus();
   }
 
   function zoom(win) {
     if (isSheet()) return;
     win.classList.toggle("is-zoomed");
+    win.style.margin = "0";
     if (win.classList.contains("is-zoomed")) {
       var parent = win.offsetParent || document.body;
-      var maxWidth = Math.min(860, parent.clientWidth - 96);
+      var maxWidth = Math.min(860, parent.clientWidth - 120);
       var left = win.getBoundingClientRect().left - parent.getBoundingClientRect().left;
-      var maxLeft = Math.max(12, parent.clientWidth - maxWidth - 72);
-      if (left > maxLeft) {
-        win.style.right = "auto";
-        win.style.left = maxLeft + "px";
-      }
+      var maxLeft = Math.max(12, parent.clientWidth - maxWidth - 80);
+      win.style.right = "auto";
+      if (left > maxLeft) win.style.left = maxLeft + "px";
     }
     focusWindow(win);
   }
@@ -155,9 +156,10 @@
         var left = ev.clientX - origin.left - shiftX;
         var top = ev.clientY - origin.top - shiftY;
         var maxLeft = Math.max(8, origin.width - 140);
-        var maxTop = Math.max(60, dockTop - origin.top - 48);
+        var maxTop = Math.max(16, dockTop - origin.top - 48);
         left = Math.min(Math.max(8, left), maxLeft);
-        top = Math.min(Math.max(60, top), maxTop);
+        top = Math.min(Math.max(12, top), maxTop);
+        win.style.margin = "0";
         win.style.right = "auto";
         win.style.left = left + "px";
         win.style.top = top + "px";
@@ -198,7 +200,7 @@
     }
     var win = event.target.closest(".window");
     if (!win) return;
-    if (event.target.closest(".traffic-close")) closeWindow(win, document.querySelector('#dock [data-open="' + win.id + '"]'));
+    if (event.target.closest(".traffic-close")) closeWindow(win, launcher(win.id));
     else if (event.target.closest(".traffic-min")) minimise(win);
     else if (event.target.closest(".traffic-zoom")) zoom(win);
   });
@@ -208,7 +210,7 @@
       var current = activeWindow();
       if (!current) return;
       event.preventDefault();
-      closeWindow(current, document.querySelector('#dock [data-open="' + current.id + '"]'));
+      closeWindow(current, launcher(current.id));
       return;
     }
     if (event.key !== "Tab" || !isSheet()) return;
@@ -242,6 +244,7 @@
         win.style.left = "";
         win.style.top = "";
         win.style.right = "";
+        win.style.margin = "";
         win.classList.remove("is-minimized", "is-zoomed", "is-front");
       });
     }
@@ -251,7 +254,7 @@
   if (sheetQuery.addEventListener) sheetQuery.addEventListener("change", onSheetChange);
   else if (sheetQuery.addListener) sheetQuery.addListener(onSheetChange);
 
-  focusWindow(document.getElementById("win-quotes"));
-  focusWindow(document.getElementById("win-work"));
+  if (document.getElementById("win-quotes")) focusWindow(document.getElementById("win-quotes"));
+  if (document.getElementById("win-jobs")) focusWindow(document.getElementById("win-jobs"));
   syncChrome();
 })();

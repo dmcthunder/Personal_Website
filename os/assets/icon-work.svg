@@ -1,7 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- ICON SLOT work: replace this file. -->
-  <rect width="64" height="64" rx="16" fill="#2c6bed"/>
-  <rect x="14" y="24" width="36" height="24" rx="4" fill="#fff"/>
-  <path d="M24 24v-4a8 8 0 0 1 16 0v4" fill="none" stroke="#fff" stroke-width="3"/>
-  <rect x="28" y="33" width="8" height="6" rx="1" fill="#2c6bed"/>
+  <!-- ICON SLOT work folder. The visible "Work" label is HTML next to this icon. Replace this file. -->
+  <path d="M8 20h16l4 6h28v26H8V20z" fill="#f0c84a"/>
+  <path d="M8 26h48v26H8V26z" fill="#ffe14a"/>
 </svg>

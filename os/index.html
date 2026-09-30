@@ -6,9 +6,9 @@
     <title>Diogo Maia Caetano</title>
     <meta
       name="description"
-      content="Lead Product Designer specialized in Enterprise SaaS and Design Systems. A desktop portfolio for Diogo Maia Caetano, based in Lisbon."
+      content="Lead Product Designer specialized in Enterprise SaaS and Design Systems. Desktop portfolio for Diogo Maia Caetano, based in Lisbon."
     />
-    <link rel="icon" href="assets/icon-portfolio.svg" />
+    <link rel="icon" href="assets/icon-spaceship.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,310 +18,409 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <a class="skip" href="#dock">Skip to apps</a>
-    <div class="os">
-      <header class="topbar">
-        <p class="brand">Diogo</p>
-        <nav aria-label="Primary">
-          <button type="button" data-open="win-work">Feed</button>
-          <button type="button" data-open="win-portfolio">Portfolio</button>
-          <button type="button" data-open="win-contact">Contact</button>
-        </nav>
-      </header>
+    <a class="skip" href="#dock">Skip to dock</a>
+    <main class="stage" id="desktop">
+      <!-- WALLPAPER SLOT: styles.css --wallpaper, file assets/wallpaper.svg -->
+      <div class="wallpaper" aria-hidden="true"></div>
 
-      <main class="stage" id="desktop">
-        <!-- WALLPAPER SLOT: styles.css --wallpaper, file assets/wallpaper.svg -->
-        <div class="wallpaper" aria-hidden="true"></div>
+      <div class="windows">
+        <section class="window is-open" id="win-jobs" role="region" aria-labelledby="jobs-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close Work"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise Work"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom Work"></button>
+            </div>
+            <h2 class="title" id="jobs-title">Work</h2>
+          </header>
+          <div class="window-body">
+            <div class="filters" role="toolbar" aria-label="Filter work">
+              <button type="button" data-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-filter="designer" aria-pressed="false">Designer</button>
+              <button type="button" data-filter="entrepreneur" aria-pressed="false">Entrepreneur</button>
+              <button type="button" data-filter="freelancer" aria-pressed="false">Freelancer</button>
+            </div>
 
-        <section class="me" aria-labelledby="intro">
-          <!-- PORTRAIT SLOT: replace assets/portrait.svg -->
-          <img src="assets/portrait.svg" width="120" height="120" alt="Placeholder portrait of Diogo Maia Caetano" />
-          <h1 id="intro">Diogo Maia Caetano</h1>
-          <p>Lead Product Designer specialized in Enterprise SaaS and Design Systems.</p>
-          <p>Based in Lisbon. 11+ years as a designer, mentor, and entrepreneur, with unicorns and NYSE-listed companies in the work as well as early teams.</p>
+            <article class="job" data-tracks="designer">
+              <h3>AstraZeneca</h3>
+              <p class="meta">Health · Web · UI Kit · B2B</p>
+              <ul>
+                <li>Supported a substantial number of users across clinical and commercial teams.</li>
+                <li>Improved workflow efficiency significantly.</li>
+                <li>Reduced task completion time substantially.</li>
+              </ul>
+            </article>
+            <article class="job" data-tracks="designer">
+              <h3>Sensei</h3>
+              <p class="meta">Retail · Web · Mobile · Design System · B2B</p>
+              <ul>
+                <li>Directly involved in creating the product for the first autonomous pharmacy in Europe.</li>
+                <li>Design System adopted across all products.</li>
+                <li>Increased in-store staff task efficiency significantly.</li>
+                <li>Improved user satisfaction score substantially.</li>
+                <li>Complete redesign of the web app and mobile app.</li>
+              </ul>
+            </article>
+            <article class="job" data-tracks="designer">
+              <h3>8x8</h3>
+              <p class="meta">Telecommunications · Web · Mobile · Design System · B2B</p>
+              <ul>
+                <li>"Store of the Future" concept expected to reduce integrated acquisition time substantially and increase adoption rate significantly.</li>
+                <li>Google Workspace Integration improved user productivity significantly, serving a substantial number of enterprise users.</li>
+                <li>Delivered solutions used by a substantial number of end users across client organizations.</li>
+              </ul>
+            </article>
+            <article class="job" data-tracks="designer">
+              <h3>Feedzai</h3>
+              <p class="meta">FinTech · AI · Web · Design System · B2B</p>
+              <ul>
+                <li>Established the Design System foundation and new components used by a substantial product organization.</li>
+                <li>Improved design consistency, reducing development handoff time significantly.</li>
+                <li>Enhanced platform usability, leading to significantly faster feature delivery.</li>
+              </ul>
+            </article>
+            <article class="job" data-tracks="designer">
+              <h3>Papersoft</h3>
+              <p class="meta">FinTech · Mobile · Design System · B2B · African Market</p>
+              <ul>
+                <li>Built an offline-first Super-App serving a substantial number of users in low-connectivity markets.</li>
+                <li>Increased user completion rate of financial operations significantly.</li>
+                <li>Successful launch on Google Play Store with positive adoption in target African markets.</li>
+              </ul>
+            </article>
+            <article class="job" data-tracks="entrepreneur">
+              <h3>Jammin'</h3>
+              <p class="role">Founder and CEO</p>
+              <ul>
+                <li>Jammin' is a collaborative music platform. I am the founder and CEO.</li>
+                <li>I am a designer and an entrepreneur. I design and build the tools of the future, lead a team, and bring product, strategy, and design together. Jammin' is where that shows up as end-to-end product ownership.</li>
+              </ul>
+            </article>
+            <article class="job" data-tracks="freelancer">
+              <h3>Consulting</h3>
+              <p class="role">Senior and lead product design</p>
+              <p>I take senior and lead product design roles. I also work with early-stage and growth teams on the product itself.</p>
+              <ul>
+                <li>Design system setup. Foundations, components, and a way of working a team can keep.</li>
+                <li>Enterprise SaaS product design. Product design for complex software, from the workflow to the interface.</li>
+                <li>Product design leadership and mentoring. Direction and critique for design teams, with hands-on partnership alongside product and engineering.</li>
+              </ul>
+            </article>
+          </div>
         </section>
 
-        <div class="windows">
-          <section class="window is-open" id="win-work" role="region" aria-labelledby="work-title">
-            <header class="titlebar">
-              <div class="traffic">
-                <button class="traffic-close" type="button" aria-label="Close Work experience"><span class="close-label">Close</span></button>
-                <button class="traffic-min" type="button" aria-label="Minimise Work experience"></button>
-                <button class="traffic-zoom" type="button" aria-label="Zoom Work experience"></button>
-              </div>
-              <h2 class="title" id="work-title">Work experience</h2>
-            </header>
-            <div class="window-body">
-              <div class="filters" role="toolbar" aria-label="Filter work experience">
-                <button type="button" data-filter="all" aria-pressed="true">All</button>
-                <button type="button" data-filter="designer" aria-pressed="false">Designer</button>
-                <button type="button" data-filter="entrepreneur" aria-pressed="false">Entrepreneur</button>
-                <button type="button" data-filter="freelancer" aria-pressed="false">Freelancer</button>
-              </div>
-
-              <article class="job" data-tracks="designer">
-                <h3>AstraZeneca</h3>
-                <p class="meta">Health · Web · UI Kit · B2B</p>
-                <ul>
-                  <li>Supported a substantial number of users across clinical and commercial teams.</li>
-                  <li>Improved workflow efficiency significantly.</li>
-                  <li>Reduced task completion time substantially.</li>
-                </ul>
-              </article>
-
-              <article class="job" data-tracks="designer">
-                <h3>Sensei</h3>
-                <p class="meta">Retail · Web · Mobile · Design System · B2B</p>
-                <p>Sensei is a tech company delivering intelligent digital solutions, combining AI tools with design to help businesses streamline operations and enhance customer experiences.</p>
-                <ul>
-                  <li>Directly involved in creating the product for the first autonomous pharmacy in Europe.</li>
-                  <li>Design System adopted across all products.</li>
-                  <li>Increased in-store staff task efficiency significantly.</li>
-                  <li>Improved user satisfaction score substantially.</li>
-                  <li>Complete redesign of the web app and mobile app.</li>
-                </ul>
-              </article>
-
-              <article class="job" data-tracks="designer">
-                <h3>8x8</h3>
-                <p class="meta">Telecommunications · Web · Mobile · Design System · B2B</p>
-                <p>8x8 offers a unified platform for voice, video, chat, and contact center solutions, including VoIP, video conferencing, and team messaging.</p>
-                <ul>
-                  <li>"Store of the Future" concept expected to reduce integrated acquisition time substantially and increase adoption rate significantly.</li>
-                  <li>Google Workspace Integration improved user productivity significantly, serving a substantial number of enterprise users.</li>
-                  <li>Delivered solutions used by a substantial number of end users across client organizations.</li>
-                </ul>
-              </article>
-
-              <article class="job" data-tracks="designer">
-                <h3>Feedzai</h3>
-                <p class="meta">FinTech · AI · Web · Design System · B2B</p>
-                <p>Feedzai leads in AI financial intelligence, offering real-time risk management to protect commerce. Its platform uses machine learning to detect fraud and ensure compliance for banks and merchants.</p>
-                <ul>
-                  <li>Established the Design System foundation and new components used by a substantial product organization.</li>
-                  <li>Improved design consistency, reducing development handoff time significantly.</li>
-                  <li>Enhanced platform usability, leading to significantly faster feature delivery.</li>
-                </ul>
-              </article>
-
-              <article class="job" data-tracks="designer">
-                <h3>Papersoft</h3>
-                <p class="meta">FinTech · Mobile · Design System · B2B · African Market</p>
-                <p>Papersoft, founded in 1999, specializes in digitalization and document management, focusing on Agency Banking and Agent Network solutions that promote financial inclusion (KYC, Agent Management, Financial Services Marketplace).</p>
-                <ul>
-                  <li>Built an offline-first Super-App serving a substantial number of users in low-connectivity markets.</li>
-                  <li>Increased user completion rate of financial operations significantly.</li>
-                  <li>Successful launch on Google Play Store with positive adoption in target African markets.</li>
-                </ul>
-              </article>
-
-              <article class="job" data-tracks="entrepreneur">
-                <h3>Jammin'</h3>
-                <p class="role">Founder and CEO</p>
-                <ul>
-                  <li>Jammin' is a collaborative music platform. I am the founder and CEO.</li>
-                  <li>I am a designer and an entrepreneur. I design and build the tools of the future, lead a team, and bring product, strategy, and design together. Jammin' is where that shows up as end-to-end product ownership.</li>
-                </ul>
-              </article>
-
-              <article class="job" data-tracks="freelancer">
-                <h3>Consulting</h3>
-                <p class="role">Senior and lead product design</p>
-                <p>I take senior and lead product design roles. I also work with early-stage and growth teams on the product itself.</p>
-                <ul>
-                  <li>Design system setup. Foundations, components, and a way of working a team can keep.</li>
-                  <li>Enterprise SaaS product design. Product design for complex software, from the workflow to the interface.</li>
-                  <li>Product design leadership and mentoring. Direction and critique for design teams, with hands-on partnership alongside product and engineering.</li>
-                </ul>
-              </article>
+        <section class="window is-open" id="win-quotes" role="region" aria-labelledby="quotes-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close In their words"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise In their words"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom In their words"></button>
             </div>
-          </section>
+            <h2 class="title" id="quotes-title">In their words</h2>
+          </header>
+          <div class="window-body quotes-body">
+            <figure class="quote-card">
+              <blockquote>
+                <p>Since I've known Diogo and worked with him, I've been able to count on a well-executed job, with attention to detail, good research practices, a design thinking approach, and the use of collaborative tools throughout the process. I recommend Diogo's work, which demonstrates experience and a critical sense of facing the exposed problems. In short, Diogo manages to come up with a well-thought-out and designed solution to overcome the problem in hands.</p>
+              </blockquote>
+              <figcaption>
+                <span class="who">João Coelho</span>
+                <span class="role">Product Manager</span>
+              </figcaption>
+            </figure>
+            <figure class="quote-card quote-card-pink">
+              <blockquote>
+                <p>I had the privilege of hiring Diogo onto our team, and from day one, he made a significant impact. His UI skills are unparalleled, and I always had complete trust in his design expertise. Diogo not only excelled in creating stunning interfaces but also consistently demonstrated a willingness to help the team improve. I can confidently say that Diogo is a valuable asset who will continue to contribute positively to the team's success. His dedication and talent are undeniable, making him an outstanding choice for any future endeavours.</p>
+              </blockquote>
+              <figcaption>
+                <span class="who">Vlad Derdeicea</span>
+                <span class="role">Product Design Manager</span>
+              </figcaption>
+            </figure>
+            <figure class="quote-card">
+              <blockquote>
+                <p>I worked with Diogo at Jammin' as a Marketing Intern for 8 weeks and had an invaluable experience. Diogo is a strong leader that brings fresh ideas and constantly guided the team with clarity. One of the best parts of working with him was his willingness to trust me with full creative control, actively supporting my ideas. It was a pleasure working for him at Jammin'!</p>
+              </blockquote>
+              <figcaption>
+                <span class="who">Yasmine Lunt</span>
+                <span class="role">Marketing Intern at Jammin'</span>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
 
-          <section class="window is-open" id="win-quotes" role="region" aria-labelledby="quotes-title">
-            <header class="titlebar">
-              <div class="traffic">
-                <button class="traffic-close" type="button" aria-label="Close Testimonials"><span class="close-label">Close</span></button>
-                <button class="traffic-min" type="button" aria-label="Minimise Testimonials"></button>
-                <button class="traffic-zoom" type="button" aria-label="Zoom Testimonials"></button>
-              </div>
-              <h2 class="title" id="quotes-title">Testimonials</h2>
-            </header>
-            <div class="window-body quotes-body">
-              <figure class="quote-card">
-                <blockquote>
-                  <p>Since I've known Diogo and worked with him, I've been able to count on a well-executed job, with attention to detail, good research practices, a design thinking approach, and the use of collaborative tools throughout the process. I recommend Diogo's work, which demonstrates experience and a critical sense of facing the exposed problems. In short, Diogo manages to come up with a well-thought-out and designed solution to overcome the problem in hands.</p>
-                </blockquote>
-                <figcaption>
-                  <span class="who">João Coelho</span>
-                  <span class="role">Product Manager</span>
-                </figcaption>
-              </figure>
-              <figure class="quote-card quote-card-pink">
-                <blockquote>
-                  <p>I had the privilege of hiring Diogo onto our team, and from day one, he made a significant impact. His UI skills are unparalleled, and I always had complete trust in his design expertise. Diogo not only excelled in creating stunning interfaces but also consistently demonstrated a willingness to help the team improve. I can confidently say that Diogo is a valuable asset who will continue to contribute positively to the team's success. His dedication and talent are undeniable, making him an outstanding choice for any future endeavours.</p>
-                </blockquote>
-                <figcaption>
-                  <span class="who">Vlad Derdeicea</span>
-                  <span class="role">Product Design Manager</span>
-                </figcaption>
-              </figure>
-              <figure class="quote-card">
-                <blockquote>
-                  <p>I worked with Diogo at Jammin' as a Marketing Intern for 8 weeks and had an invaluable experience. Diogo is a strong leader that brings fresh ideas and constantly guided the team with clarity. One of the best parts of working with him was his willingness to trust me with full creative control, actively supporting my ideas. It was a pleasure working for him at Jammin'!</p>
-                </blockquote>
-                <figcaption>
-                  <span class="who">Yasmine Lunt</span>
-                  <span class="role">Marketing Intern at Jammin'</span>
-                </figcaption>
-              </figure>
+        <section class="window" id="win-about" role="region" aria-labelledby="about-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close About me"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise About me"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom About me"></button>
             </div>
-          </section>
+            <h2 class="title" id="about-title">About me</h2>
+          </header>
+          <div class="window-body about-body">
+            <!-- PORTRAIT SLOT: assets/portrait.svg -->
+            <img src="assets/portrait.svg" width="96" height="96" alt="Placeholder portrait of Diogo Maia Caetano" />
+            <h1>Diogo Maia Caetano</h1>
+            <p>Lead Product Designer specialized in Enterprise SaaS and Design Systems.</p>
+            <p>I'm a designer and entrepreneur, creating the tools of the future.</p>
+            <p>Based in Lisbon. 11+ years as a designer, mentor, and entrepreneur, with unicorns and NYSE-listed companies in the work as well as early teams.</p>
+            <p>I specialize in designing intuitive user experiences, scalable design systems, and product strategies that bridge business goals with user needs.</p>
+          </div>
+        </section>
 
-          <section class="window" id="win-portfolio" role="region" aria-labelledby="portfolio-title">
-            <header class="titlebar">
-              <div class="traffic">
-                <button class="traffic-close" type="button" aria-label="Close Portfolio"><span class="close-label">Close</span></button>
-                <button class="traffic-min" type="button" aria-label="Minimise Portfolio"></button>
-                <button class="traffic-zoom" type="button" aria-label="Zoom Portfolio"></button>
-              </div>
-              <h2 class="title" id="portfolio-title">Portfolio</h2>
-            </header>
-            <div class="window-body">
-              <p class="lead">I specialize in designing intuitive user experiences, scalable design systems, and product strategies that bridge business goals with user needs.</p>
-
-              <article class="case case-feedzai">
-                <h3>Feedzai</h3>
-                <p class="meta">FinTech · AI · Web · Design System · B2B</p>
-                <p>Feedzai leads in AI financial intelligence, offering real-time risk management to protect commerce. Its platform uses machine learning to detect fraud and ensure compliance for banks and merchants.</p>
-                <ul>
-                  <li>Established the Design System foundation and new components used by a substantial product organization.</li>
-                  <li>Improved design consistency, reducing development handoff time significantly.</li>
-                  <li>Enhanced platform usability, leading to significantly faster feature delivery.</li>
-                </ul>
-                <p><a class="see" href="#" aria-label="See the Feedzai case study">See here</a></p>
-              </article>
-
-              <article class="case case-eight">
-                <h3>8x8</h3>
-                <p class="meta">Telecommunications · Web · Mobile · Design System · B2B</p>
-                <p>8x8 offers a unified platform for voice, video, chat, and contact center solutions, including VoIP, video conferencing, and team messaging.</p>
-                <ul>
-                  <li>"Store of the Future" concept expected to reduce integrated acquisition time substantially and increase adoption rate significantly.</li>
-                  <li>Google Workspace Integration improved user productivity significantly, serving a substantial number of enterprise users.</li>
-                  <li>Delivered solutions used by a substantial number of end users across client organizations.</li>
-                </ul>
-                <p><a class="see" href="#" aria-label="See the 8x8 case study">See here</a></p>
-              </article>
-
-              <article class="case case-sensei">
-                <h3>Sensei</h3>
-                <p class="meta">Retail · Web · Mobile · Design System · B2B</p>
-                <p>Sensei is a tech company delivering intelligent digital solutions, combining AI tools with design to help businesses streamline operations and enhance customer experiences.</p>
-                <ul>
-                  <li>Directly involved in creating the product for the first autonomous pharmacy in Europe.</li>
-                  <li>Design System adopted across all products.</li>
-                  <li>Increased in-store staff task efficiency significantly.</li>
-                  <li>Improved user satisfaction score substantially.</li>
-                  <li>Complete redesign of the web app and mobile app.</li>
-                </ul>
-                <p><a class="see" href="#" aria-label="See the Sensei case study">See here</a></p>
-              </article>
-
-              <article class="case case-papersoft">
-                <h3>Papersoft</h3>
-                <p class="meta">FinTech · Mobile · Design System · B2B · African Market</p>
-                <p>Papersoft, founded in 1999, specializes in digitalization and document management, focusing on Agency Banking and Agent Network solutions that promote financial inclusion (KYC, Agent Management, Financial Services Marketplace).</p>
-                <ul>
-                  <li>Built an offline-first Super-App serving a substantial number of users in low-connectivity markets.</li>
-                  <li>Increased user completion rate of financial operations significantly.</li>
-                  <li>Successful launch on Google Play Store with positive adoption in target African markets.</li>
-                </ul>
-                <p><a class="see" href="#" aria-label="See the Papersoft case study">See here</a></p>
-              </article>
+        <section class="window" id="win-jammin" role="region" aria-labelledby="jammin-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close Jammin'"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise Jammin'"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom Jammin'"></button>
             </div>
-          </section>
+            <h2 class="title" id="jammin-title">Jammin'</h2>
+          </header>
+          <div class="window-body">
+            <p class="kicker">Founder</p>
+            <p class="lead">Jammin' is a collaborative music platform. I am the founder and CEO.</p>
+            <p>I am a designer and an entrepreneur. I design and build the tools of the future, lead a team, and bring product, strategy, and design together. Jammin' is where that shows up as end-to-end product ownership.</p>
+            <p><a class="see" href="#">Jammin'</a></p>
+          </div>
+        </section>
 
-          <section class="window" id="win-jammin" role="region" aria-labelledby="jammin-title">
-            <header class="titlebar">
-              <div class="traffic">
-                <button class="traffic-close" type="button" aria-label="Close Jammin'"><span class="close-label">Close</span></button>
-                <button class="traffic-min" type="button" aria-label="Minimise Jammin'"></button>
-                <button class="traffic-zoom" type="button" aria-label="Zoom Jammin'"></button>
-              </div>
-              <h2 class="title" id="jammin-title">Jammin'</h2>
-            </header>
-            <div class="window-body">
-              <p class="kicker">Founder</p>
-              <p class="lead">Jammin' is a collaborative music platform. I am the founder and CEO.</p>
-              <p>I am a designer and an entrepreneur. I design and build the tools of the future, lead a team, and bring product, strategy, and design together. Jammin' is where that shows up as end-to-end product ownership.</p>
-              <p><a class="see" href="#">Jammin'</a></p>
+        <section class="window window-resume" id="win-resume" role="region" aria-labelledby="resume-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close Work experience"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise Work experience"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom Work experience"></button>
             </div>
-          </section>
+            <h2 class="title" id="resume-title">Work experience</h2>
+          </header>
+          <div class="window-body resume-body">
+            <!-- ROCKET SLOT: assets/rocket.svg -->
+            <img class="rocket" src="assets/rocket.svg" alt="" />
+            <p><a class="see" href="#">Download resume</a></p>
+          </div>
+        </section>
 
-          <section class="window" id="win-contact" role="region" aria-labelledby="contact-title">
-            <header class="titlebar">
-              <div class="traffic">
-                <button class="traffic-close" type="button" aria-label="Close Contact"><span class="close-label">Close</span></button>
-                <button class="traffic-min" type="button" aria-label="Minimise Contact"></button>
-                <button class="traffic-zoom" type="button" aria-label="Zoom Contact"></button>
-              </div>
-              <h2 class="title" id="contact-title">Contact</h2>
-            </header>
-            <div class="window-body contact-body">
-              <p class="kicker">Email</p>
-              <p class="email"><a href="mailto:diogomaiacaetano@gmail.com">diogomaiacaetano<wbr>@gmail.com</a></p>
-              <p><a class="see" href="https://www.linkedin.com/in/diogomaiacaetano" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+        <section class="window" id="win-contact" role="region" aria-labelledby="contact-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close Contact"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise Contact"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom Contact"></button>
             </div>
-          </section>
-        </div>
+            <h2 class="title" id="contact-title">Contact</h2>
+          </header>
+          <div class="window-body contact-body">
+            <p class="kicker">Email</p>
+            <p class="email"><a href="mailto:diogomaiacaetano@gmail.com">diogomaiacaetano<wbr>@gmail.com</a></p>
+            <p><a class="see" href="https://www.linkedin.com/in/diogomaiacaetano" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+          </div>
+        </section>
 
-        <nav class="sidebar" aria-label="Apps">
-          <button type="button" data-open="win-work" aria-label="Work experience" aria-controls="win-work">
-            <img src="assets/icon-work.svg" alt="" width="36" height="36" />
-          </button>
-          <button type="button" data-open="win-portfolio" aria-label="Portfolio" aria-controls="win-portfolio">
-            <img src="assets/icon-portfolio.svg" alt="" width="36" height="36" />
-          </button>
-          <button type="button" data-open="win-quotes" aria-label="Testimonials" aria-controls="win-quotes">
-            <img src="assets/icon-testimonials.svg" alt="" width="36" height="36" />
-          </button>
-          <button type="button" data-open="win-jammin" aria-label="Jammin'" aria-controls="win-jammin">
-            <img src="assets/icon-jammin.svg" alt="" width="36" height="36" />
-          </button>
-          <button type="button" data-open="win-contact" aria-label="Contact" aria-controls="win-contact">
-            <img src="assets/icon-contact.svg" alt="" width="36" height="36" />
-          </button>
-        </nav>
+        <!-- TODO: Taste Labs has no public copy yet. Replace this Coming soon window with real role and bullets. Do not invent facts or metrics. -->
+        <section class="window" id="win-tastelabs" role="region" aria-labelledby="tastelabs-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close Taste Labs"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise Taste Labs"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom Taste Labs"></button>
+            </div>
+            <h2 class="title" id="tastelabs-title">Taste Labs</h2>
+          </header>
+          <div class="window-body">
+            <p class="coming">Coming soon</p>
+          </div>
+        </section>
 
-        <nav class="dock" id="dock" aria-label="Dock">
-          <button class="dock-btn" type="button" data-open="win-work" aria-label="Work experience" aria-controls="win-work" aria-pressed="true">
-            <img src="assets/icon-work.svg" alt="" width="48" height="48" />
-            <span class="dock-label">Work</span>
-            <span class="dock-pip" aria-hidden="true"></span>
-          </button>
-          <button class="dock-btn" type="button" data-open="win-portfolio" aria-label="Portfolio" aria-controls="win-portfolio" aria-pressed="false">
-            <img src="assets/icon-portfolio.svg" alt="" width="48" height="48" />
-            <span class="dock-label">Portfolio</span>
-            <span class="dock-pip" aria-hidden="true"></span>
-          </button>
-          <button class="dock-btn" type="button" data-open="win-quotes" aria-label="Testimonials" aria-controls="win-quotes" aria-pressed="true">
-            <img src="assets/icon-testimonials.svg" alt="" width="48" height="48" />
-            <span class="dock-label">Quotes</span>
-            <span class="dock-pip" aria-hidden="true"></span>
-          </button>
-          <button class="dock-btn" type="button" data-open="win-jammin" aria-label="Jammin'" aria-controls="win-jammin" aria-pressed="false">
-            <img src="assets/icon-jammin.svg" alt="" width="48" height="48" />
-            <span class="dock-label">Jammin'</span>
-            <span class="dock-pip" aria-hidden="true"></span>
-          </button>
-          <button class="dock-btn" type="button" data-open="win-contact" aria-label="Contact" aria-controls="win-contact" aria-pressed="false">
-            <img src="assets/icon-contact.svg" alt="" width="48" height="48" />
-            <span class="dock-label">Contact</span>
-            <span class="dock-pip" aria-hidden="true"></span>
-          </button>
-        </nav>
-      </main>
-    </div>
+        <section class="window" id="win-astrazeneca" role="region" aria-labelledby="az-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close AstraZeneca"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise AstraZeneca"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom AstraZeneca"></button>
+            </div>
+            <h2 class="title" id="az-title">AstraZeneca</h2>
+          </header>
+          <div class="window-body">
+            <p class="kicker">Also worked with</p>
+            <p class="meta">Health · Web · UI Kit · B2B</p>
+            <!-- TODO role: the sanitised AstraZeneca notes have no job title. Add the role here only when it is supplied. -->
+            <ul>
+              <li>Supported a substantial number of users across clinical and commercial teams.</li>
+              <li>Improved workflow efficiency significantly.</li>
+              <li>Reduced task completion time substantially.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="window" id="win-sensei" role="region" aria-labelledby="sensei-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close Sensei"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise Sensei"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom Sensei"></button>
+            </div>
+            <h2 class="title" id="sensei-title">Sensei</h2>
+          </header>
+          <div class="window-body">
+            <p class="meta">Retail · Web · Mobile · Design System · B2B</p>
+            <p>Sensei is a tech company delivering intelligent digital solutions, combining AI tools with design to help businesses streamline operations and enhance customer experiences.</p>
+            <ul>
+              <li>Directly involved in creating the product for the first autonomous pharmacy in Europe.</li>
+              <li>Design System adopted across all products.</li>
+              <li>Increased in-store staff task efficiency significantly.</li>
+              <li>Improved user satisfaction score substantially.</li>
+              <li>Complete redesign of the web app and mobile app.</li>
+            </ul>
+            <p><a class="see" href="#" aria-label="See the Sensei case study">See here</a></p>
+          </div>
+        </section>
+
+        <section class="window" id="win-eight" role="region" aria-labelledby="eight-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close 8x8"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise 8x8"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom 8x8"></button>
+            </div>
+            <h2 class="title" id="eight-title">8x8</h2>
+          </header>
+          <div class="window-body">
+            <p class="meta">Telecommunications · Web · Mobile · Design System · B2B</p>
+            <p>8x8 offers a unified platform for voice, video, chat, and contact center solutions, including VoIP, video conferencing, and team messaging.</p>
+            <ul>
+              <li>"Store of the Future" concept expected to reduce integrated acquisition time substantially and increase adoption rate significantly.</li>
+              <li>Google Workspace Integration improved user productivity significantly, serving a substantial number of enterprise users.</li>
+              <li>Delivered solutions used by a substantial number of end users across client organizations.</li>
+            </ul>
+            <p><a class="see" href="#" aria-label="See the 8x8 case study">See here</a></p>
+          </div>
+        </section>
+
+        <section class="window" id="win-feedzai" role="region" aria-labelledby="feedzai-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close Feedzai"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise Feedzai"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom Feedzai"></button>
+            </div>
+            <h2 class="title" id="feedzai-title">Feedzai</h2>
+          </header>
+          <div class="window-body">
+            <p class="meta">FinTech · AI · Web · Design System · B2B</p>
+            <p>Feedzai leads in AI financial intelligence, offering real-time risk management to protect commerce. Its platform uses machine learning to detect fraud and ensure compliance for banks and merchants.</p>
+            <ul>
+              <li>Established the Design System foundation and new components used by a substantial product organization.</li>
+              <li>Improved design consistency, reducing development handoff time significantly.</li>
+              <li>Enhanced platform usability, leading to significantly faster feature delivery.</li>
+            </ul>
+            <p><a class="see" href="#" aria-label="See the Feedzai case study">See here</a></p>
+          </div>
+        </section>
+
+        <!-- TODO: OutSystems has no public copy yet. Replace this Coming soon window with real role and bullets. Do not invent facts or metrics. -->
+        <section class="window" id="win-outsystems" role="region" aria-labelledby="outsystems-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close OutSystems"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise OutSystems"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom OutSystems"></button>
+            </div>
+            <h2 class="title" id="outsystems-title">OutSystems</h2>
+          </header>
+          <div class="window-body">
+            <p class="coming">Coming soon</p>
+          </div>
+        </section>
+
+        <section class="window" id="win-papersoft" role="region" aria-labelledby="papersoft-title">
+          <header class="titlebar">
+            <div class="traffic">
+              <button class="traffic-close" type="button" aria-label="Close Papersoft"><span class="close-label">Close</span></button>
+              <button class="traffic-min" type="button" aria-label="Minimise Papersoft"></button>
+              <button class="traffic-zoom" type="button" aria-label="Zoom Papersoft"></button>
+            </div>
+            <h2 class="title" id="papersoft-title">Papersoft</h2>
+          </header>
+          <div class="window-body">
+            <p class="meta">FinTech · Mobile · Design System · B2B · African Market</p>
+            <p>Papersoft, founded in 1999, specializes in digitalization and document management, focusing on Agency Banking and Agent Network solutions that promote financial inclusion (KYC, Agent Management, Financial Services Marketplace).</p>
+            <ul>
+              <li>Built an offline-first Super-App serving a substantial number of users in low-connectivity markets.</li>
+              <li>Increased user completion rate of financial operations significantly.</li>
+              <li>Successful launch on Google Play Store with positive adoption in target African markets.</li>
+            </ul>
+            <p><a class="see" href="#" aria-label="See the Papersoft case study">See here</a></p>
+          </div>
+        </section>
+      </div>
+
+      <nav class="work-rail" aria-label="Areas of work">
+        <button class="rail-btn rail-work" type="button" data-open="win-jobs" aria-label="Work" data-tip="Work">
+          <img src="assets/icon-work.svg" alt="" width="48" height="48" />
+          <span class="rail-label">Work</span>
+          <span class="tip" aria-hidden="true">Work</span>
+        </button>
+        <button class="rail-btn" type="button" data-open="win-tastelabs" aria-label="Taste Labs" data-tip="Taste Labs">
+          <img src="assets/icon-tastelabs.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">Taste Labs</span>
+        </button>
+        <button class="rail-btn" type="button" data-open="win-astrazeneca" aria-label="AstraZeneca" data-tip="AstraZeneca">
+          <img src="assets/icon-astrazeneca.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">AstraZeneca</span>
+        </button>
+        <button class="rail-btn" type="button" data-open="win-sensei" aria-label="Sensei" data-tip="Sensei">
+          <img src="assets/icon-sensei.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">Sensei</span>
+        </button>
+        <button class="rail-btn" type="button" data-open="win-eight" aria-label="8x8" data-tip="8x8">
+          <img src="assets/icon-8x8.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">8x8</span>
+        </button>
+        <button class="rail-btn" type="button" data-open="win-feedzai" aria-label="Feedzai" data-tip="Feedzai">
+          <img src="assets/icon-feedzai.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">Feedzai</span>
+        </button>
+        <button class="rail-btn" type="button" data-open="win-outsystems" aria-label="OutSystems" data-tip="OutSystems">
+          <img src="assets/icon-outsystems.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">OutSystems</span>
+        </button>
+        <button class="rail-btn" type="button" data-open="win-papersoft" aria-label="Papersoft" data-tip="Papersoft">
+          <img src="assets/icon-papersoft.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">Papersoft</span>
+        </button>
+        <img class="heart" src="assets/sticker-heart.svg" alt="" width="36" height="36" />
+      </nav>
+
+      <nav class="dock" id="dock" aria-label="Dock">
+        <button class="dock-btn dock-polaroid" type="button" data-open="win-about" aria-label="About me" data-tip="About me">
+          <img src="assets/portrait.svg" alt="" width="40" height="48" />
+          <span class="tip" aria-hidden="true">About me</span>
+          <span class="dock-pip" aria-hidden="true"></span>
+        </button>
+        <button class="dock-btn" type="button" data-open="win-quotes" aria-label="Testimonials, In their words" data-tip="In their words">
+          <img src="assets/icon-testimonials.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">In their words</span>
+          <span class="dock-pip" aria-hidden="true"></span>
+        </button>
+        <button class="dock-btn" type="button" data-open="win-jammin" aria-label="Jammin'" data-tip="Jammin'">
+          <img src="assets/icon-jammin.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">Jammin'</span>
+          <span class="dock-pip" aria-hidden="true"></span>
+        </button>
+        <button class="dock-btn" type="button" data-open="win-resume" aria-label="Sweet Spaceship, Work experience" data-tip="Sweet Spaceship">
+          <img src="assets/icon-spaceship.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">Sweet Spaceship</span>
+          <span class="dock-pip" aria-hidden="true"></span>
+        </button>
+        <button class="dock-btn" type="button" data-open="win-contact" aria-label="Contact" data-tip="Contact">
+          <img src="assets/icon-contact.svg" alt="" width="48" height="48" />
+          <span class="tip" aria-hidden="true">Contact</span>
+          <span class="dock-pip" aria-hidden="true"></span>
+        </button>
+      </nav>
+    </main>
     <noscript>
       <p class="noscript">JavaScript is required to open, close, and move the desktop windows.</p>
     </noscript>

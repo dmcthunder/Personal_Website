@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- ICON SLOT testimonials: replace this file. -->
+  <!-- ICON SLOT testimonials: pink lightning. Replace this file. -->
   <rect width="64" height="64" rx="16" fill="#ff4d94"/>
-  <path d="M16 20h32v22H28l-8 8v-8h-4V20z" fill="#fff"/>
+  <path d="M36 8L16 36h14l-4 20 22-30H32l4-18z" fill="#fff"/>
 </svg>

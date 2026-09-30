@@ -62,6 +62,31 @@
     syncChrome();
   }
 
+  var cascadeIndex = 0;
+
+  function cascade(win) {
+    if (isSheet() || win.dataset.placed === "1") return;
+    if (win.id === "win-jobs" || win.id === "win-quotes") return;
+    var parent = win.parentElement;
+    var n = cascadeIndex;
+    cascadeIndex += 1;
+    var width = win.getBoundingClientRect().width || 440;
+    var dock = document.querySelector(".dock");
+    var originTop = parent.getBoundingClientRect().top;
+    var dockTop = dock ? dock.getBoundingClientRect().top - originTop : parent.clientHeight - 100;
+    var left = 64 + (n % 6) * 32;
+    var top = 24 + (n % 6) * 28;
+    var maxLeft = Math.max(12, parent.clientWidth - width - 88);
+    var maxTop = Math.max(12, dockTop - 56);
+    left = Math.min(left, maxLeft);
+    top = Math.min(top, maxTop);
+    win.style.margin = "0";
+    win.style.right = "auto";
+    win.style.left = Math.round(left) + "px";
+    win.style.top = Math.round(top) + "px";
+    win.dataset.placed = "1";
+  }
+
   function openWindow(id) {
     var win = document.getElementById(id);
     if (!win) return;
@@ -77,6 +102,7 @@
     }
     win.classList.remove("is-minimized", "is-closing");
     win.classList.add("is-open");
+    cascade(win);
     focusWindow(win);
     var closeBtn = win.querySelector(".traffic-close");
     if (closeBtn) closeBtn.focus();

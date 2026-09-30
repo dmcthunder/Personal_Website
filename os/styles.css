@@ -87,18 +87,19 @@ button { cursor: pointer; }
 .window.is-active { box-shadow: 0 28px 60px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.55); }
 
 #win-jobs {
-  left: 28px;
+  left: max(16px, 2.2vw);
   top: 28px;
-  width: min(460px, 36vw);
-  height: min(680px, calc(100vh - 150px));
+  width: min(500px, 36vw);
+  height: min(68vh, calc(100vh - 156px));
 }
 
 #win-quotes {
   left: auto;
   right: 108px;
-  top: 48px;
-  width: min(400px, 32vw);
-  height: min(600px, calc(100vh - 170px));
+  top: 36px;
+  width: min(360px, 28vw);
+  height: auto;
+  max-height: calc(100vh - 156px);
 }
 
 #win-about { left: 90px; top: 64px; }
@@ -285,18 +286,22 @@ h1 { margin: 12px 0 8px; font-size: 1.45rem; line-height: 1.15; }
 .rocket {
   position: absolute;
   left: 50%;
-  top: 18%;
-  width: min(220px, 70%);
+  top: 8%;
+  width: min(280px, 78%);
   height: auto;
   transform: translateX(-50%);
-  opacity: 0.28;
+  opacity: 1;
   pointer-events: none;
+  border-radius: 28px;
 }
 
 .quotes-body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow-y: auto;
+  max-height: calc(100vh - 214px);
+  padding: 14px 16px 28px;
   background: radial-gradient(circle at 18% 0%, rgba(255, 225, 74, 0.45), transparent 42%), #efeae2;
 }
 
@@ -308,13 +313,13 @@ h1 { margin: 12px 0 8px; font-size: 1.45rem; line-height: 1.15; }
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
-.quote-card:nth-child(1) { transform: rotate(-1.4deg); }
-.quote-card:nth-child(3) { transform: rotate(1deg); }
+.quote-card:nth-child(1) { transform: rotate(-1deg); }
+.quote-card:nth-child(3) { transform: rotate(0.8deg); margin-bottom: 8px; }
 
 .quote-card-pink {
   background: var(--pink);
   color: #1a1a1a;
-  transform: rotate(1.5deg);
+  transform: rotate(1.1deg);
 }
 
 .quote-card blockquote,
@@ -541,6 +546,9 @@ h1 { margin: 12px 0 8px; font-size: 1.45rem; line-height: 1.15; }
 
   .window,
   .window.is-open { display: none; }
+
+  #win-quotes { max-height: none; }
+  .quotes-body { max-height: none; padding-bottom: 28px; }
 
   #win-jobs,
   #win-quotes,

@@ -291,6 +291,10 @@ body {
 
 .embed--light { background: #FAFAFC; }
 
+/* Apple Music's player is designed for up to ~660px wide, so this window is narrower. */
+.window--music { width: min(680px, calc(100vw - 300px)); }
+.embed--music { background: transparent; }
+
 /* Testimonials */
 
 .testimonials {

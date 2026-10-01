@@ -212,6 +212,20 @@
       <iframe class="embed embed--light" title="Sweet Spaceship game" data-src="https://dmcthunder.github.io/Sweet-Spaceship/" allow="fullscreen; gamepad; autoplay"></iframe>
     </section>
 
+    <!-- Music window (Apple Music's official embed; the regular playlist page can't be framed) -->
+    <section class="window window--work window--app window--music" id="music" data-window hidden aria-labelledby="music-title">
+      <header class="window__bar">
+        <div class="window__controls">
+          <button class="control control--close" type="button" aria-label="Close window" data-close></button>
+          <span class="control"></span>
+          <span class="control"></span>
+        </div>
+        <h2 class="window__title" id="music-title">Rock Them Hard</h2>
+        <div class="window__controls-spacer"></div>
+      </header>
+      <iframe class="embed embed--music" title="Rock Them Hard playlist on Apple Music" data-src="https://embed.music.apple.com/pt/playlist/rock-them-hard/pl.u-PDb40oVuZ15G7p" allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"></iframe>
+    </section>
+
     <!-- Testimonials widget -->
     <section class="testimonials" id="testimonials" data-window hidden aria-label="Testimonials">
       <div class="testimonials__card">
@@ -276,6 +290,7 @@
       <button class="dock__item dock__item--phone" type="button" data-open="work" aria-label="Work experience"><img src="assets/icons/work.png" alt="" width="48" height="48"></button>
       <button class="dock__item" type="button" data-open="jammin" aria-label="Jammin'"><img src="assets/icons/jammin.png" alt="" width="48" height="48"></button>
       <button class="dock__item" type="button" data-open="spaceship" aria-label="Sweet Spaceship"><img src="assets/icons/sweet-spaceship.png" alt="" width="48" height="48"></button>
+      <button class="dock__item" type="button" data-open="music" aria-label="Music: Rock Them Hard"><img src="assets/icons/cassette.svg" alt="" width="48" height="48"></button>
       <button class="dock__item" type="button" data-open="testimonials" aria-label="What other people say">
         <svg viewBox="0 0 40 40" width="48" height="48" aria-hidden="true"><path transform="translate(2 3)" d="M18 32.583L15.583 30.383C7 22.6 1.333 17.467 1.333 11.167 1.333 6.033 5.367 2 10.5 2 13.4 2 16.183 3.35 18 5.483 19.817 3.35 22.6 2 25.5 2 30.633 2 34.667 6.033 34.667 11.167 34.667 17.467 29 22.6 20.417 30.4L18 32.583Z" fill="#FF4546" stroke="#FFFFFF" stroke-width="2" paint-order="stroke"/></svg>
       </button>

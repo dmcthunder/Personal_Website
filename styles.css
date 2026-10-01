@@ -482,10 +482,14 @@ a.dock__item {
   transition: transform 0.15s ease;
 }
 
-button.dock__item:hover,
-a.dock__item:hover,
 button.dock__item:focus-visible,
 a.dock__item:focus-visible { transform: scale(1.1667); } /* 48px → 56px */
+
+/* Only on real pointers; on touch, a tap would leave the icon stuck enlarged. */
+@media (hover: hover) {
+  button.dock__item:hover,
+  a.dock__item:hover { transform: scale(1.1667); }
+}
 
 /* Responsive */
 
@@ -494,31 +498,50 @@ a.dock__item:focus-visible { transform: scale(1.1667); } /* 48px → 56px */
 }
 
 @media (max-width: 760px) {
+  /*
+   * Phone spacing: a 16px gutter around everything, a compact dock floating
+   * 16px above the bottom edge, and 16px between the window and the dock.
+   * Dock height = icon 36 + padding 2×8 + border 2 = 54px.
+   */
+  :root {
+    --icon-size: 36px;
+    --gutter: 16px;
+    --dock-height: 54px;
+    --dock-bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
+  }
+
   body { background-attachment: scroll; }
   .rail { display: none; }
 
-  /* Phones get full-screen sheets: no moving or resizing. */
+  /* Phones get floating sheets: no moving or resizing. */
   .window,
   .testimonials {
     position: fixed;
-    top: 12px !important;
-    left: 12px !important;
-    right: 12px;
-    bottom: 96px;
+    top: calc(var(--gutter) + env(safe-area-inset-top, 0px)) !important;
+    left: var(--gutter) !important;
+    right: var(--gutter);
+    bottom: calc(var(--dock-bottom) + var(--dock-height) + var(--gutter));
     width: auto !important;
     height: auto !important;
     overflow-y: auto;
+    border-radius: 14px;
   }
 
   .resize { display: none; }
-  .dock__item--phone { display: block; }
-  /* Six dock icons at 48px don't fit a 375px phone, and there's no hover on touch. */
-  :root { --icon-size: 44px; }
-  .dock { gap: 10px; padding: 12px; }
   .window__bar,
   .testimonials__head { cursor: auto; touch-action: auto; }
 
-  .window--hello .window__body { padding: 0 8px; }
+  .dock {
+    bottom: var(--dock-bottom);
+    gap: 8px;
+    padding: 8px;
+    border-radius: 16px;
+  }
+
+  .dock__item--phone { display: block; }
+
+  .window--hello { padding: 16px 16px 32px; gap: 28px; }
+  .window--hello .window__body { padding: 0 4px; gap: 28px; }
   .headline { font-size: 30px; line-height: 36px; }
   .facts { flex-direction: column; gap: 24px; }
   .stats { width: auto; }

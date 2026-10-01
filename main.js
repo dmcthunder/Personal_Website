@@ -6,6 +6,7 @@ const isPhone = window.matchMedia('(max-width: 760px)');
 
 // Embeds load only while their window is open, so audio never keeps playing in the background.
 function setVisible(win, visible) {
+  if (visible && win.collapsing) win.collapsing.cancel();
   win.hidden = !visible;
   // A window's default size, measured the first time it opens, is its minimum size.
   if (visible && !win.dataset.minWidth && !isPhone.matches) {
@@ -38,9 +39,58 @@ document.querySelectorAll('[data-open]').forEach(button => {
   button.addEventListener('click', () => openWindow(button.dataset.open, button.dataset.job));
 });
 
+// The icon a window collapses into: its dock icon, or the rail's Work folder on desktop.
+function launcherFor(id) {
+  const candidates = document.querySelectorAll(`.dock [data-open="${id}"], .rail [data-open="${id}"]:not([data-job])`);
+  return [...candidates].find(el => el.offsetParent !== null);
+}
+
+// macOS-style "genie" close: the window funnels into a trapezoid, then
+// shrinks into its launcher icon. Skipped for people who prefer reduced motion.
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+async function collapse(win) {
+  const target = launcherFor(win.id);
+  if (!target || prefersReducedMotion.matches) {
+    setVisible(win, false);
+    return;
+  }
+
+  const from = win.getBoundingClientRect();
+  const to = target.getBoundingClientRect();
+  // Transforms run from the window's bottom centre, so these move it onto the icon's bottom centre.
+  const dx = (to.left + to.width / 2) - (from.left + from.width / 2);
+  const dy = to.bottom - from.bottom;
+  const sx = to.width / from.width;
+  const sy = to.height / from.height;
+
+  // Every keyframe uses the same transform functions so the browser interpolates them smoothly.
+  const frame = (x, y, tilt, scaleX, scaleY) =>
+    `translate(${x}px, ${y}px) perspective(700px) rotateX(${tilt}deg) scale(${scaleX}, ${scaleY})`;
+
+  win.style.transformOrigin = '50% 100%';
+  win.style.pointerEvents = 'none';
+  win.collapsing = win.animate([
+    { transform: frame(0, 0, 0, 1, 1), opacity: 1 },
+    { transform: frame(dx * 0.2, dy * 0.25, -28, 0.62, 0.78), opacity: 1, offset: 0.45 },
+    { transform: frame(dx, dy, -10, sx, sy), opacity: 0.3 },
+  ], { duration: 480, easing: 'cubic-bezier(0.45, 0, 0.2, 1)' });
+
+  try {
+    await win.collapsing.finished;
+    setVisible(win, false);
+  } catch {
+    // Cancelled because the window was reopened mid-collapse: leave it open.
+  } finally {
+    win.collapsing = null;
+    win.style.transformOrigin = '';
+    win.style.pointerEvents = '';
+  }
+}
+
 document.querySelectorAll('[data-close]').forEach(button => {
   button.addEventListener('click', () => {
-    setVisible(button.closest('[data-window]'), false);
+    collapse(button.closest('[data-window]'));
     railApps.forEach(app => app.classList.remove('is-active'));
   });
 });

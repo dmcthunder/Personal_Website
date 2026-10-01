@@ -15,6 +15,7 @@ button { font: inherit; color: inherit; }
   --glass: rgba(255, 255, 255, 0.88);
   --pill: rgba(202, 202, 202, 0.5);
   --highlight: rgba(255, 212, 84, 0.5);
+  --window-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25);
   --close: #FF4546;
   --control: #EDEDED;
   --sans: "Montserrat", system-ui, sans-serif;
@@ -48,8 +49,25 @@ body {
   border-radius: 8px;
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--window-shadow);
 }
+
+/* Moving and resizing (set up in main.js) */
+
+.window__bar,
+.testimonials__head { cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; }
+
+.is-dragging,
+.is-dragging * { cursor: grabbing !important; user-select: none; -webkit-user-select: none; }
+
+/* Keep embeds from swallowing the pointer mid-drag. */
+.is-dragging iframe,
+.is-resizing iframe { pointer-events: none; }
+
+.resize { position: absolute; z-index: 2; touch-action: none; }
+.resize--e { top: 8px; right: 0; bottom: 8px; width: 6px; cursor: ew-resize; }
+.resize--s { left: 8px; right: 8px; bottom: 0; height: 6px; cursor: ns-resize; }
+.resize--se { right: 0; bottom: 0; width: 14px; height: 14px; cursor: nwse-resize; }
 
 .window--hello {
   top: 56px;
@@ -252,12 +270,11 @@ body {
 
 .achievement svg { flex-shrink: 0; }
 
-/* Jammin' */
+/* Embedded apps */
 
-.window--jammin {
-  background: rgba(17, 17, 17, 0.88);
-  padding-bottom: 16px;
-}
+.window--app { padding-bottom: 16px; }
+
+.window--jammin { background: rgba(17, 17, 17, 0.88); }
 
 .window--jammin .window__title { color: #FFFFFF; }
 .window--jammin .control:not(.control--close) { background: rgba(255, 255, 255, 0.2); }
@@ -271,6 +288,8 @@ body {
   background: #000000;
 }
 
+.embed--light { background: #FAFAFC; }
+
 /* Testimonials */
 
 .testimonials {
@@ -278,6 +297,8 @@ body {
   top: 30px;
   left: 40px;
   width: 400px;
+  /* Same shadow as the windows, but follows the tilted card stack's outline. */
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
 }
 
 .testimonials::before,
@@ -450,6 +471,8 @@ body {
 .dock__item img,
 .dock__item svg { display: block; }
 
+.dock__item--phone { display: none; }
+
 button.dock__item,
 a.dock__item { cursor: pointer; transition: transform 0.15s ease; }
 
@@ -466,17 +489,24 @@ a.dock__item:hover { transform: translateY(-4px) scale(1.1); }
   body { background-attachment: scroll; }
   .rail { display: none; }
 
+  /* Phones get full-screen sheets: no moving or resizing. */
   .window,
   .testimonials {
     position: fixed;
-    top: 12px;
-    left: 12px;
+    top: 12px !important;
+    left: 12px !important;
     right: 12px;
     bottom: 96px;
-    width: auto;
-    height: auto;
+    width: auto !important;
+    height: auto !important;
     overflow-y: auto;
   }
+
+  .resize { display: none; }
+  .dock__item--phone { display: block; }
+  .dock { gap: 12px; padding: 12px; }
+  .window__bar,
+  .testimonials__head { cursor: auto; touch-action: auto; }
 
   .window--hello .window__body { padding: 0 8px; }
   .headline { font-size: 30px; line-height: 36px; }

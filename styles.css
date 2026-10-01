@@ -252,6 +252,25 @@ body {
 
 .achievement svg { flex-shrink: 0; }
 
+/* Jammin' */
+
+.window--jammin {
+  background: rgba(17, 17, 17, 0.88);
+  padding-bottom: 16px;
+}
+
+.window--jammin .window__title { color: #FFFFFF; }
+.window--jammin .control:not(.control--close) { background: rgba(255, 255, 255, 0.2); }
+
+.embed {
+  flex: 1;
+  width: auto;
+  margin: 0 16px;
+  border: 0;
+  border-radius: 6px;
+  background: #000000;
+}
+
 /* Testimonials */
 
 .testimonials {
@@ -428,7 +447,8 @@ body {
   background: none;
 }
 
-.dock__item img { display: block; }
+.dock__item img,
+.dock__item svg { display: block; }
 
 button.dock__item,
 a.dock__item { cursor: pointer; transition: transform 0.15s ease; }

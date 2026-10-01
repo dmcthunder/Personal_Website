@@ -18,20 +18,55 @@ function setVisible(win, visible) {
   if (!visible) embed.removeAttribute('src');
 }
 
-// One screen at a time, like the design frames: opening one closes the others.
-// `source` is the clicked control; the window grows out of it when it's an icon.
+// Stacking, like macOS: the window you click or open comes to the front;
+// the others stay open behind it and look inactive.
+let topZ = 10; // The dock sits above every window at z-index 10000.
+
+function bringToFront(win) {
+  if (win.classList.contains('is-front')) return;
+  windows.forEach(other => other.classList.remove('is-front'));
+  win.classList.add('is-front');
+  win.style.zIndex = ++topZ;
+}
+
+// When the front window closes, the next one down becomes active.
+function focusTopmost(except) {
+  const open = [...windows].filter(win => !win.hidden && win !== except && win.genieDirection !== 'close');
+  if (!open.length) return;
+  bringToFront(open.reduce((top, win) => (Number(win.style.zIndex) > Number(top.style.zIndex) ? win : top)));
+}
+
+// A window opening for the first time cascades down-right of the windows already
+// open, so it doesn't land exactly on top of one. Afterwards it remembers where it was left.
+function cascade(win) {
+  if (win.dataset.placed || isPhone.matches) return;
+  win.dataset.placed = 'true';
+  const others = [...windows].filter(other => other !== win && !other.hidden).length;
+  if (!others) return;
+  const step = 28 * Math.min(others, 4);
+  const { left, top } = getComputedStyle(win);
+  win.style.left = `${parseFloat(left) + step}px`;
+  win.style.top = `${parseFloat(top) + step}px`;
+}
+
+// `source` is the clicked control; a newly opened window grows out of it.
 function openWindow(id, job, source) {
   const win = document.getElementById(id);
   const wasOpen = !win.hidden && win.genieDirection !== 'close';
-  // Buttons inside a window vanish as it closes, so those open from the window's own icon instead.
-  const icon = source && !source.closest('[data-window]') ? source : launcherFor(id);
 
-  windows.forEach(other => setVisible(other, other === win));
-  if (!wasOpen) genie(win, icon, 'open');
+  if (wasOpen) {
+    bringToFront(win);
+  } else {
+    cascade(win);
+    setVisible(win, true);
+    bringToFront(win);
+    genie(win, source || launcherFor(id), 'open');
+  }
 
-  railApps.forEach(app => app.classList.toggle('is-active', id === 'work' && Boolean(job) && app.dataset.job === job));
-
-  if (id === 'work') highlightJob(job);
+  if (id === 'work') {
+    railApps.forEach(app => app.classList.toggle('is-active', Boolean(job) && app.dataset.job === job));
+    highlightJob(job);
+  }
 }
 
 function highlightJob(job) {
@@ -104,10 +139,20 @@ async function collapse(win) {
 
 document.querySelectorAll('[data-close]').forEach(button => {
   button.addEventListener('click', () => {
-    collapse(button.closest('[data-window]'));
-    railApps.forEach(app => app.classList.remove('is-active'));
+    const win = button.closest('[data-window]');
+    collapse(win);
+    // Like macOS, the next window becomes active as soon as you click close.
+    if (win.classList.contains('is-front')) {
+      win.classList.remove('is-front');
+      focusTopmost(win);
+    }
+    if (win.id === 'work') railApps.forEach(app => app.classList.remove('is-active'));
   });
 });
+
+// Pressing anywhere on a window brings it forward. Background windows' embeds ignore the
+// pointer (see styles.css), so that first press reaches the window, as on macOS.
+windows.forEach(win => win.addEventListener('pointerdown', () => bringToFront(win)));
 
 // Moving and resizing, desktop only
 
@@ -165,8 +210,13 @@ windows.forEach(win => {
   });
 });
 
-// The Hello window is open on load, so record its minimum size now.
-windows.forEach(win => { if (!win.hidden) setVisible(win, true); });
+// The Hello window is open on load: record its minimum size and make it the active window.
+windows.forEach(win => {
+  if (win.hidden) return;
+  setVisible(win, true);
+  win.dataset.placed = 'true';
+  bringToFront(win);
+});
 
 // Testimonials pager
 const quotes = [...document.querySelectorAll('.quote')];

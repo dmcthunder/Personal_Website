@@ -48,10 +48,20 @@ body {
   flex-direction: column;
   background: var(--glass);
   border-radius: 8px;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   box-shadow: var(--window-shadow);
 }
+
+/* Stacking (set up in main.js): background windows look inactive, like macOS. */
+
+.window:not(.is-front) .window__title { opacity: 0.5; }
+.window:not(.is-front) .control--close { background: var(--control); }
+.window--jammin:not(.is-front) .control--close { background: rgba(255, 255, 255, 0.2); }
+.window:not(.is-front) .control--close:hover { background: var(--close); }
+
+/* The first press on a background window's embed brings the window forward instead of reaching the embed. */
+[data-window]:not(.is-front) iframe { pointer-events: none; }
 
 /* Moving and resizing (set up in main.js) */
 

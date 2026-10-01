@@ -14,15 +14,15 @@
 <body>
   <main class="desktop">
 
-    <!-- Main window -->
-    <section class="window" id="about-window" aria-labelledby="window-title">
+    <!-- Hello window -->
+    <section class="window window--hello" id="hello" data-window aria-labelledby="hello-title">
       <header class="window__bar">
         <div class="window__controls">
-          <button class="control control--close" type="button" aria-label="Close window" data-close-window></button>
+          <button class="control control--close" type="button" aria-label="Close window" data-close></button>
           <span class="control"></span>
           <span class="control"></span>
         </div>
-        <h1 class="window__title" id="window-title">Hello, I'm Diogo</h1>
+        <h1 class="window__title" id="hello-title">Hello, I'm Diogo</h1>
         <div class="window__controls-spacer"></div>
       </header>
 
@@ -56,41 +56,203 @@
         </div>
 
         <div class="actions">
-          <a class="button button--primary" href="os/">
+          <button class="button button--primary" type="button" data-open="work">
             Open work experience
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a class="button button--secondary" href="mailto:diogomaiacaetano@gmail.com">Get in touch</a>
+          </button>
+          <button class="button button--secondary" type="button" data-open="testimonials">What people say</button>
         </div>
       </div>
     </section>
 
-    <!-- Companies column -->
-    <nav class="companies" aria-label="Companies I've worked with">
-      <a class="app" href="os/" data-label="Work experience"><img src="assets/icons/work.png" alt="Work experience" width="40" height="40"></a>
-      <a class="app" href="os/" data-label="Taste Labs"><img src="assets/icons/taste-labs.png" alt="Taste Labs" width="40" height="40"></a>
-      <a class="app" href="os/" data-label="AstraZeneca"><img src="assets/icons/astrazeneca.png" alt="AstraZeneca" width="40" height="40"></a>
-      <a class="app" href="os/" data-label="Sensei"><img src="assets/icons/sensei.png" alt="Sensei" width="40" height="40"></a>
-      <a class="app" href="os/" data-label="8x8"><img src="assets/icons/8x8.png" alt="8x8" width="40" height="40"></a>
-      <a class="app" href="os/" data-label="Feedzai"><img src="assets/icons/feedzai.png" alt="Feedzai" width="40" height="40"></a>
-      <a class="app" href="os/" data-label="OutSystems"><img src="assets/icons/outsystems.png" alt="OutSystems" width="40" height="40"></a>
-      <a class="app" href="os/" data-label="Papersoft"><img src="assets/icons/papersoft.png" alt="Papersoft" width="40" height="40"></a>
+    <!-- Work experience window -->
+    <section class="window window--work" id="work" data-window hidden aria-labelledby="work-title">
+      <header class="window__bar">
+        <div class="window__controls">
+          <button class="control control--close" type="button" aria-label="Close window" data-close></button>
+          <span class="control"></span>
+          <span class="control"></span>
+        </div>
+        <h2 class="window__title" id="work-title">Work experience</h2>
+        <div class="window__controls-spacer"></div>
+      </header>
+
+      <div class="jobs" tabindex="0">
+        <article class="job" id="job-taste-labs">
+          <img class="job__logo" src="assets/logos/taste-labs.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>Taste Labs</strong> <strong>//</strong> Integrated Designer (Critique &amp; Art Direction)</p><p>07/2026 - Now • Remote</p></div>
+            <p>Taste Labs</p>
+          </div>
+        </article>
+        <article class="job" id="job-astrazeneca">
+          <img class="job__logo" src="assets/logos/astrazeneca.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>AstraZeneca</strong> <strong>//</strong> Product Designer</p><p>12/2025 - 06/2026 • Remote</p></div>
+            <p>Providing design guidance and solutions across multiple pharma industry initiatives, translating complex clinical and operational workflows into clear, human-centred digital experiences.</p>
+          </div>
+        </article>
+        <article class="job" id="job-sensei">
+          <img class="job__logo" src="assets/logos/sensei.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>Sensei</strong> <strong>//</strong> Product Designer</p><p>05/2025 - 12/2025 • Lisbon, PT</p></div>
+            <ul>
+              <li>Designed, handed-off, and collaborated actively with the development team on the Web App and Mobile App.</li>
+              <li>Creation of the Design Systems that defines Sensei new design language and ensures consistency.</li>
+              <li>Involved in the design process for the creation of the first parapharmacy totally autonomous in Europe.</li>
+            </ul>
+            <p class="achievement">
+              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path transform="translate(0.5 0.75)" d="M14.833 7.25L13.207 5.39 13.433 2.93 11.027 2.383 9.767 0.25 7.5 1.223 5.233 0.25 3.973 2.377 1.567 2.917 1.793 5.383 0.167 7.25 1.793 9.11 1.567 11.577 3.973 12.123 5.233 14.25 7.5 13.27 9.767 14.243 11.027 12.117 13.433 11.57 13.207 9.11 14.833 7.25ZM6.227 10.397L3.693 7.857 4.68 6.87 6.227 8.423 10.127 4.51 11.113 5.497 6.227 10.397Z" fill="#CACACA"/></svg>
+              Design system adopted across all product lines
+            </p>
+          </div>
+        </article>
+        <article class="job" id="job-8x8">
+          <img class="job__logo" src="assets/logos/8x8.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>8x8</strong> <strong>//</strong> Lead Product Designer</p><p>12/2022 - 09/2024 • Remote</p></div>
+            <ul>
+              <li>Led the design vertical of Integrations, while collaborating with Google, Microsoft, and Salesforce.</li>
+              <li>Contributed greatly to the design of Work App, Jitsi, and Oxygen DS, enhancing usability, engagement, and good design practices.</li>
+              <li>Drove the Integrations App Store’s innovation.</li>
+              <li>Contributed to the Supervisor App’s development, ensuring a seamless handoff for implementation.</li>
+              <li>Used Figma and user-centered design principles to craft intuitive, scalable solutions that streamlined workflows and strengthened the design ecosystem.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job" id="job-feedzai">
+          <img class="job__logo" src="assets/logos/feedzai.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>Feedzai</strong> <strong>//</strong> Senior Product Designer</p><p>07/2021 - 12/2022 • Remote</p></div>
+            <ul>
+              <li>Pioneered the Design System, bridging creativity and functionality to streamline collaboration and accelerate iteration across teams.</li>
+              <li>Transformed RiskOps Studio, Case Manager, and Pulse, leveraging user feedback to create intuitive, high-impact solutions.</li>
+              <li>Partnered with stakeholders to align design decisions with business strategy, improving usability and adoption across key products.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job" id="job-outsystems">
+          <img class="job__logo" src="assets/logos/outsystems.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>OutSystems</strong> <strong>//</strong> UX/UI Design Consultant</p><p>06/2020 - 12/2020 • Remote</p></div>
+            <ul>
+              <li>Be an advocate for the user experience and user interface design practices in the R&amp;D area, and voice our users' needs to help build a better product;</li>
+              <li>Collaborate with cross-functional teams, within an Agile approach, to drive the design process from ideation to product delivery and launch;</li>
+              <li>Head user and product research, lead ideation processes, detail end-to-end mockup solutions/prototypes, and drive user testing sessions in iteration for proven great solution;</li>
+              <li>Get into our clients' shoes to effectively find issues and draw pragmatic solutions;</li>
+              <li>Be driven, flexible and enthusiastic, bringing new inspiring ideas to the teams.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job" id="job-papersoft">
+          <img class="job__logo" src="assets/logos/papersoft.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>Papersoft</strong> <strong>//</strong> Senior Product Designer</p><p>08/2019 - 06/2020 • Lisbon, PT</p></div>
+            <ul>
+              <li>Led the redesign of mobile and web applications built for the African market, adapting to a unique and complex user landscape.</li>
+              <li>Developed a cohesive UI Kit, unifying design efforts while fostering creativity across teams.</li>
+              <li>Designed and prepared guerrilla usability tests, which were conducted by the PM during visits to target countries, ensuring real-world user insights informed the product.</li>
+              <li>Ensured the product was culturally aligned, making it more accessible and intuitive for its audience.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job" id="job-apiax">
+          <img class="job__logo" src="assets/logos/apiax.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>Apiax</strong> <strong>//</strong> Product Designer</p><p>10/2018 - 08/2019 • Lisbon, PT</p></div>
+            <ul>
+              <li>Led the web platform redesign, simplifying compliance workflows and improving usability for financial institutions.</li>
+              <li>Developed a cohesive UI Kit, ensuring a unified design language across products.</li>
+              <li>Conducted user testing and iterative design, refining interactions based on real-world feedback.</li>
+              <li>Played a key role in securing their latest investment, reinforcing Apiax’s leadership in regulatory technology.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job" id="job-anybrain">
+          <img class="job__logo" src="assets/logos/anybrain.png" alt="" width="40" height="40">
+          <div class="job__content">
+            <div class="job__head"><p><strong>AnyBrain</strong> <strong>//</strong> Founding Product Designer</p><p>03/2017 - 10/2018 • Braga, PT</p></div>
+            <ul>
+              <li>Played a foundational role in shaping Performetric’s design vision, leading the revitalization of web and desktop applications.</li>
+              <li>Used data-driven strategies to enhance user engagement and optimize usability</li>
+              <li>Led the company’s rebranding efforts, designing a new website that strengthened its market presence.</li>
+              <li>Contributed to securing of an early investment, a partnership with Talkdesk (joining App Connect), and attracted Spotify as a product tester.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Testimonials widget -->
+    <section class="testimonials" id="testimonials" data-window hidden aria-label="Testimonials">
+      <div class="testimonials__card">
+        <header class="testimonials__head">
+          <h2>Testimonials</h2>
+          <div class="pager">
+            <button type="button" aria-label="Previous testimonial" data-step="-1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <span class="pager__count" aria-live="polite"><span data-index>1</span> — 4</span>
+            <button type="button" aria-label="Next testimonial" data-step="1"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </header>
+
+        <figure class="quote">
+          <blockquote>
+            <p>"Since I've known Diogo and worked with him, I've been able to count on a well-executed job, with attention to detail, good research practices, a design thinking approach, and the use of collaborative tools throughout the process.</p>
+            <p>I recommend Diogo's work, which demonstrates experience and a critical sense of facing the exposed problems. In short, Diogo manages to come up with a well-thought-out and designed solution to overcome the problem in hands."</p>
+          </blockquote>
+          <figcaption><img src="assets/people/joao-coelho.png" alt="" width="40" height="40"><span><strong>João Coelho</strong>Product Manager @ Papersoft</span></figcaption>
+        </figure>
+
+        <figure class="quote" hidden>
+          <blockquote>
+            <p>"I had the privilege of hiring Diogo onto our team, and from day one, he made a significant impact. His UI skills are unparalleled, and I always had complete trust in his design expertise. Diogo not only excelled in creating stunning interfaces but also consistently demonstrated a willingness to help the team improve.</p>
+            <p>I can confidently say that Diogo is a valuable asset who will continue to contribute positively to the team's success. His dedication and talent are undeniable, making him an outstanding choice for any future endeavours."</p>
+          </blockquote>
+          <figcaption><img src="assets/people/vlad-derdeicea.png" alt="" width="40" height="40"><span><strong>Vlad Derdeicea</strong>Product Design Manager @ 8x8</span></figcaption>
+        </figure>
+
+        <figure class="quote" hidden>
+          <blockquote>
+            <p>"I have had the incredible opportunity of being both an intern and fully employed at 8x8, with Diogo as my mentor for about 3-4 months, and I can't express how grateful I am for the experience. Diogo consistently showed a genuine interest in my growth and development, and I knew that I could always count on him to provide guidance and support. He was very patient with me and ensured I understood the assignments, making me feel confident in my journey. His mentorship has been an invaluable asset to my personal and professional growth, and I can’t thank him enough for his dedication and support.</p>
+            <p>I can truly say that Diogo is not just a mentor but a role model. I am fortunate to still have him as my guide because every day I learn something new from him that brings a lot of value to my career as a Product Designer."</p>
+          </blockquote>
+          <figcaption><span class="initials" aria-hidden="true">IB</span><span><strong>Ioana Boeriu</strong>Product Designer @ 8x8</span></figcaption>
+        </figure>
+
+        <figure class="quote" hidden>
+          <blockquote>
+            <p>"I worked with Diogo at Jammin' as a Marketing Intern for 8 weeks and had an invaluable experience. Diogo is a strong leader that brings fresh ideas and constantly guided the team with clarity. One of the best parts of working with him was his willingness to trust me with full creative control, actively supporting my ideas. It was a pleasure working for him at Jammin'!"</p>
+          </blockquote>
+          <figcaption><img src="assets/people/yasmine-lunt.png" alt="" width="40" height="40"><span><strong>Yasmine Lunt</strong>Marketing Intern @ Jammin'</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Rail: work + companies + testimonials -->
+    <nav class="rail" aria-label="Work and testimonials">
+      <button class="app" type="button" data-open="work" data-label="Work experience"><img src="assets/icons/work.png" alt="Work experience" width="40" height="40"></button>
+      <button class="app" type="button" data-open="work" data-job="taste-labs" data-label="Taste Labs"><img src="assets/icons/taste-labs.png" alt="Taste Labs" width="40" height="40"></button>
+      <button class="app" type="button" data-open="work" data-job="astrazeneca" data-label="AstraZeneca"><img src="assets/icons/astrazeneca.png" alt="AstraZeneca" width="40" height="40"></button>
+      <button class="app" type="button" data-open="work" data-job="sensei" data-label="Sensei"><img src="assets/icons/sensei.png" alt="Sensei" width="40" height="40"></button>
+      <button class="app" type="button" data-open="work" data-job="8x8" data-label="8x8"><img src="assets/icons/8x8.png" alt="8x8" width="40" height="40"></button>
+      <button class="app" type="button" data-open="work" data-job="feedzai" data-label="Feedzai"><img src="assets/icons/feedzai.png" alt="Feedzai" width="40" height="40"></button>
+      <button class="app" type="button" data-open="work" data-job="outsystems" data-label="OutSystems"><img src="assets/icons/outsystems.png" alt="OutSystems" width="40" height="40"></button>
+      <button class="app" type="button" data-open="work" data-job="papersoft" data-label="Papersoft"><img src="assets/icons/papersoft.png" alt="Papersoft" width="40" height="40"></button>
+      <button class="app app--heart" type="button" data-open="testimonials" data-label="What other people say">
+        <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><path transform="translate(2 3)" d="M18 32.583L15.583 30.383C7 22.6 1.333 17.467 1.333 11.167 1.333 6.033 5.367 2 10.5 2 13.4 2 16.183 3.35 18 5.483 19.817 3.35 22.6 2 25.5 2 30.633 2 34.667 6.033 34.667 11.167 34.667 17.467 29 22.6 20.417 30.4L18 32.583Z" fill="#FF4546" stroke="#FFFFFF" stroke-width="2" paint-order="stroke"/></svg>
+      </button>
     </nav>
 
     <!-- Dock -->
     <nav class="dock" aria-label="Dock">
-      <button class="dock__item" type="button" data-open-window aria-label="About"><img src="assets/icons/about.png" alt="" width="40" height="40"></button>
-      <a class="dock__item" href="os/" aria-label="Jammin'"><img src="assets/icons/jammin.png" alt="" width="40" height="40"></a>
-      <a class="dock__item" href="os/" aria-label="Sweet Spaceship"><img src="assets/icons/sweet-spaceship.png" alt="" width="40" height="40"></a>
-      <a class="dock__item" href="mailto:diogomaiacaetano@gmail.com" aria-label="Contact"><img src="assets/icons/mailbox.png" alt="" width="40" height="40"></a>
+      <button class="dock__item" type="button" data-open="hello" aria-label="About me"><img src="assets/icons/about.png" alt="" width="40" height="40"></button>
+      <span class="dock__item"><img src="assets/icons/jammin.png" alt="Jammin'" width="40" height="40"></span>
+      <a class="dock__item" href="https://dmcthunder.github.io/Sweet-Spaceship" target="_blank" rel="noopener" aria-label="Sweet Spaceship (opens in a new tab)"><img src="assets/icons/sweet-spaceship.png" alt="" width="40" height="40"></a>
+      <span class="dock__item"><img src="assets/icons/mailbox.png" alt="Contact" width="40" height="40"></span>
     </nav>
 
   </main>
 
-  <script>
-    const win = document.getElementById('about-window');
-    document.querySelector('[data-close-window]').addEventListener('click', () => win.hidden = true);
-    document.querySelector('[data-open-window]').addEventListener('click', () => win.hidden = false);
-  </script>
+  <script src="main.js"></script>
 </body>
 </html>

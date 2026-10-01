@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- ICON SLOT spaceship: Sweet Spaceship resume. Replace this file. -->
-  <rect width="64" height="64" rx="16" fill="#1a2744"/>
-  <path d="M32 6 c8 10 12 20 12 32 v4 H20 v-4 c0-12 4-22 12-32 z" fill="#f4efe2"/>
-  <circle cx="32" cy="26" r="4.5" fill="#163a8a"/>
-  <path d="M20 40 L10 52 h12 l-2-12 z" fill="#ffe14a"/>
-  <path d="M44 40 L54 52 H42 l2-12 z" fill="#ffe14a"/>
-  <path d="M28 42 h8 l-2 12 h-4 l-2-12 z" fill="#ffb000"/>
-</svg>

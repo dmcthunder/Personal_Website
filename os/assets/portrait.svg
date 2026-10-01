@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-  <!-- PORTRAIT SLOT: replace this file with a square photo. The page points at assets/portrait.svg. -->
-  <rect width="160" height="160" fill="#c5c5c5"/>
-  <circle cx="80" cy="62" r="28" fill="#8a8a8a"/>
-  <path d="M28 156c6-46 98-46 104 0" fill="#8a8a8a"/>
-</svg>

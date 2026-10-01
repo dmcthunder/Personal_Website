@@ -16,6 +16,7 @@ button { font: inherit; color: inherit; }
   --pill: rgba(202, 202, 202, 0.5);
   --highlight: rgba(255, 212, 84, 0.5);
   --window-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25);
+  --icon-size: 48px;
   --close: #FF4546;
   --control: #EDEDED;
   --sans: "Montserrat", system-ui, sans-serif;
@@ -406,8 +407,8 @@ body {
 .app {
   position: relative;
   display: block;
-  width: 40px;
-  height: 40px;
+  width: var(--icon-size);
+  height: var(--icon-size);
   padding: 0;
   border: 0;
   border-radius: 8px;
@@ -416,7 +417,7 @@ body {
 }
 
 .app img,
-.app svg { display: block; border-radius: 8px; }
+.app svg { display: block; width: var(--icon-size); height: var(--icon-size); border-radius: 10px; }
 
 .app.is-active { box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px var(--ink-soft); }
 
@@ -469,15 +470,22 @@ body {
 }
 
 .dock__item img,
-.dock__item svg { display: block; }
+.dock__item svg { display: block; width: var(--icon-size); height: var(--icon-size); }
 
 .dock__item--phone { display: none; }
 
+/* Grow from the bottom edge, like the macOS dock, without shifting neighbours. */
 button.dock__item,
-a.dock__item { cursor: pointer; transition: transform 0.15s ease; }
+a.dock__item {
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  transition: transform 0.15s ease;
+}
 
 button.dock__item:hover,
-a.dock__item:hover { transform: translateY(-4px) scale(1.1); }
+a.dock__item:hover,
+button.dock__item:focus-visible,
+a.dock__item:focus-visible { transform: scale(1.1667); } /* 48px → 56px */
 
 /* Responsive */
 
@@ -504,7 +512,9 @@ a.dock__item:hover { transform: translateY(-4px) scale(1.1); }
 
   .resize { display: none; }
   .dock__item--phone { display: block; }
-  .dock { gap: 12px; padding: 12px; }
+  /* Six dock icons at 48px don't fit a 375px phone, and there's no hover on touch. */
+  :root { --icon-size: 44px; }
+  .dock { gap: 10px; padding: 12px; }
   .window__bar,
   .testimonials__head { cursor: auto; touch-action: auto; }
 

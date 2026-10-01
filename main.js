@@ -6,7 +6,6 @@ const isPhone = window.matchMedia('(max-width: 760px)');
 
 // Embeds load only while their window is open, so audio never keeps playing in the background.
 function setVisible(win, visible) {
-  if (visible && win.collapsing) win.collapsing.cancel();
   win.hidden = !visible;
   // A window's default size, measured the first time it opens, is its minimum size.
   if (visible && !win.dataset.minWidth && !isPhone.matches) {
@@ -20,8 +19,15 @@ function setVisible(win, visible) {
 }
 
 // One screen at a time, like the design frames: opening one closes the others.
-function openWindow(id, job) {
-  windows.forEach(win => setVisible(win, win.id === id));
+// `source` is the clicked control; the window grows out of it when it's an icon.
+function openWindow(id, job, source) {
+  const win = document.getElementById(id);
+  const wasOpen = !win.hidden && win.genieDirection !== 'close';
+  // Buttons inside a window vanish as it closes, so those open from the window's own icon instead.
+  const icon = source && !source.closest('[data-window]') ? source : launcherFor(id);
+
+  windows.forEach(other => setVisible(other, other === win));
+  if (!wasOpen) genie(win, icon, 'open');
 
   railApps.forEach(app => app.classList.toggle('is-active', id === 'work' && Boolean(job) && app.dataset.job === job));
 
@@ -36,7 +42,7 @@ function highlightJob(job) {
 }
 
 document.querySelectorAll('[data-open]').forEach(button => {
-  button.addEventListener('click', () => openWindow(button.dataset.open, button.dataset.job));
+  button.addEventListener('click', () => openWindow(button.dataset.open, button.dataset.job, button));
 });
 
 // The icon a window collapses into: its dock icon, or the rail's Work folder on desktop.
@@ -45,19 +51,18 @@ function launcherFor(id) {
   return [...candidates].find(el => el.offsetParent !== null);
 }
 
-// macOS-style "genie" close: the window funnels into a trapezoid, then
-// shrinks into its launcher icon. Skipped for people who prefer reduced motion.
+// macOS-style "genie": closing funnels the window into a trapezoid and shrinks it
+// into its icon; opening plays the same motion backwards, out of the icon.
+// Skipped for people who prefer reduced motion. Resolves true if it ran to the end.
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-async function collapse(win) {
-  const target = launcherFor(win.id);
-  if (!target || prefersReducedMotion.matches) {
-    setVisible(win, false);
-    return;
-  }
+function genie(win, icon, direction) {
+  // Interrupting (e.g. reopening mid-close) starts the new motion from the window's real position.
+  win.genie?.cancel();
+  if (!icon || prefersReducedMotion.matches) return Promise.resolve(true);
 
   const from = win.getBoundingClientRect();
-  const to = target.getBoundingClientRect();
+  const to = icon.getBoundingClientRect();
   // Transforms run from the window's bottom centre, so these move it onto the icon's bottom centre.
   const dx = (to.left + to.width / 2) - (from.left + from.width / 2);
   const dy = to.bottom - from.bottom;
@@ -70,22 +75,31 @@ async function collapse(win) {
 
   win.style.transformOrigin = '50% 100%';
   win.style.pointerEvents = 'none';
-  win.collapsing = win.animate([
+  const animation = win.animate([
     { transform: frame(0, 0, 0, 1, 1), opacity: 1 },
     { transform: frame(dx * 0.2, dy * 0.25, -28, 0.62, 0.78), opacity: 1, offset: 0.45 },
     { transform: frame(dx, dy, -10, sx, sy), opacity: 0.3 },
-  ], { duration: 480, easing: 'cubic-bezier(0.45, 0, 0.2, 1)' });
+  ], {
+    duration: 480,
+    easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
+    direction: direction === 'open' ? 'reverse' : 'normal',
+  });
+  win.genie = animation;
+  win.genieDirection = direction;
 
-  try {
-    await win.collapsing.finished;
-    setVisible(win, false);
-  } catch {
-    // Cancelled because the window was reopened mid-collapse: leave it open.
-  } finally {
-    win.collapsing = null;
+  const settle = completed => {
+    if (win.genie !== animation) return completed;
+    win.genie = null;
+    win.genieDirection = null;
     win.style.transformOrigin = '';
     win.style.pointerEvents = '';
-  }
+    return completed;
+  };
+  return animation.finished.then(() => settle(true), () => settle(false));
+}
+
+async function collapse(win) {
+  if (await genie(win, launcherFor(win.id), 'close')) setVisible(win, false);
 }
 
 document.querySelectorAll('[data-close]').forEach(button => {

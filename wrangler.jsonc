@@ -1,0 +1,13 @@
+// Cloudflare Workers config for diogomaiacaetano.net.
+// The site is static: Cloudflare serves the repo root as-is, minus what .assetsignore excludes.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portfolio",
+  "compatibility_date": "2026-10-01",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "."
+  }
+}

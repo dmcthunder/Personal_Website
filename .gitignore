@@ -1,3 +1,5 @@
 .claude/
 .DS_Store
 .tools/
+.wrangler/
+node_modules/

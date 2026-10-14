@@ -122,8 +122,22 @@ svg {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.brand__mark,
+.brand__mark img {
+  flex: none; /* the header row is tight on small screens; never squeeze the mark */
+}
+
+.brand__mark img {
+  display: block;
+  width: auto;
+  height: 32px;
 }
 
 .nav-group {
@@ -173,8 +187,16 @@ svg {
   }
 
   .pill {
-    padding-inline: 20px;
+    padding-inline: 14px;
     gap: 0;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand__mark img {
+    height: 28px;
   }
 
   .pill__label {

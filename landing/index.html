@@ -30,8 +30,8 @@
 
   <div class="page">
     <header class="header">
-      <a class="logo" href="./" aria-label="Diogo Maia Caetano, home">
-        <img src="assets/crown.gif" alt="" width="37" height="38">
+      <a class="logo" href="./" aria-label="Diogo Maia Caetano, home" title="Psst, try dragging the crown onto Diogo">
+        <img src="assets/crown.gif" alt="" width="37" height="38" draggable="false">
       </a>
       <nav class="ctas" aria-label="Main">
         <a class="cta" href="#testimonials" data-target="testimonials">
@@ -98,26 +98,253 @@
 
       <section class="bio" aria-label="About">
         <p>
-          <a class="badge badge--first" href="/about/">
+          <a class="badge badge--first" href="#about" data-modal="about">
             <img class="badge__avatar" src="assets/avatar.png" alt="" width="24" height="24"><span>Diogo Maia Caetano</span>
           </a>is a Lead Product Designer who turns complex problems into calm, intuitive
-          products. For over 10 years he’s designed for<a class="badge" href="#pharma">
+          products. For over 10 years he’s designed for<a class="badge" href="#pharma" data-modal="pharma">
             <span class="badge__icon" style="--c:#3ED29C"><svg width="16" height="16" aria-hidden="true"><use href="#i-pill"/></svg></span><span>Pharma</span>
-          </a>,<a class="badge" href="#retail">
+          </a>,<a class="badge" href="#retail" data-modal="retail">
             <span class="badge__icon badge__icon--dark" style="--c:#F4F983"><svg width="16" height="16" aria-hidden="true"><use href="#i-store"/></svg></span><span>Retail</span>
-          </a>, and<a class="badge" href="#telecommunications">
+          </a>, and<a class="badge" href="#telecommunications" data-modal="telecommunications">
             <span class="badge__icon" style="--c:#FF4546"><svg width="16" height="16" aria-hidden="true"><use href="#i-phone"/></svg></span><span>Telecommunications</span>
           </a>,
-          building<a class="badge" href="#design-systems">
+          building<a class="badge" href="#design-systems" data-modal="design-systems">
             <span class="badge__icon" style="--c:#007AFF"><svg width="16" height="16" aria-hidden="true"><use href="#i-token"/></svg></span><span>Design Systems</span>
           </a>and experiences people actually enjoy.
-          <br>Off the clock, you’ll find him<a class="badge badge--jammin" href="#jammin">
+          <br>Off the clock, you’ll find him<a class="badge badge--jammin" href="#jammin" data-modal="jammin">
             <img class="badge__avatar" src="assets/jammin.png" alt="" width="24" height="24"><span>Jammin’</span>
           </a>.
         </p>
       </section>
     </main>
   </div>
+
+
+  <!-- Badge windows: opened from the bio badges (main.js) -->
+  <div class="modal" id="modal-about" role="dialog" aria-modal="true" aria-labelledby="modal-about-title" hidden>
+    <div class="modal__scrim" data-close></div>
+    <div class="modal__panel" tabindex="-1">
+      <header class="modal__head">
+        <img class="modal__avatar" src="assets/avatar.png" alt="" width="40" height="40">
+        <div class="modal__heading">
+          <h2 class="modal__title" id="modal-about-title">Diogo Maia Caetano</h2>
+          <p class="modal__eyebrow">Lead Product Designer · 11+ years</p>
+        </div>
+        <button class="modal__close" type="button" data-close aria-label="Close"><kbd>Esc</kbd><span class="only-fine">to close</span><span class="only-touch">Close</span></button>
+      </header>
+      <p class="about__headline">Designing the future, so everyday life gets drastically simpler.</p>
+      <p class="modal__lede">I’m a visionary, passionate about futuristic solutions that radically improve people’s lives by simplifying the processes behind them. For more than half of my career, I’ve done that for unicorns and NYSE-listed companies.</p>
+      <dl class="stats">
+        <div class="stat"><dt>11+</dt><dd>years in product design</dd></div>
+        <div class="stat"><dt>6+</dt><dd>years at unicorns &amp; NYSE-listed companies</dd></div>
+      </dl>
+      <div class="industries">
+        <h3 class="modal__eyebrow">Industries</h3>
+        <ul class="tags">
+          <li>AI</li><li>Health</li><li>Pharma</li><li>VR/AR</li><li>FinTech</li><li>RegTech</li><li>Telecommunications</li><li>Retail</li><li>Music</li>
+        </ul>
+      </div>
+      <footer class="modal__foot">
+        <a class="cta cta--primary cta--small" href="mailto:diogomaiacaetano@icloud.com"><span class="cta__track"><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-email"/></svg><span class="cta__label">Send email</span><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-open"/></svg></span></a>
+        <a class="cta cta--small" href="https://drive.google.com/file/d/14qPH3ANQL8dysrcKLIsAA15_PM9UK4ti/view?usp=sharing" target="_blank" rel="noopener"><span class="cta__track"><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-news"/></svg><span class="cta__label">Resume</span><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-open"/></svg></span></a>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-pharma" role="dialog" aria-modal="true" aria-labelledby="modal-pharma-title" hidden>
+    <div class="modal__scrim" data-close></div>
+    <div class="modal__panel" tabindex="-1">
+      <header class="modal__head">
+        <span class="badge__icon modal__icon" style="--c:#3ED29C"><svg width="16" height="16" aria-hidden="true"><use href="#i-pill"/></svg></span>
+        <div class="modal__heading">
+          <p class="modal__eyebrow">Work experience</p>
+          <h2 class="modal__title" id="modal-pharma-title">Pharma</h2>
+        </div>
+        <button class="modal__close" type="button" data-close aria-label="Close"><kbd>Esc</kbd><span class="only-fine">to close</span><span class="only-touch">Close</span></button>
+      </header>
+      <p class="modal__lede">From clinical and operational workflows at AstraZeneca to Europe’s first fully autonomous parapharmacy at Sensei.</p>
+      <div class="jobs">
+          <article class="job">
+            <img class="job__logo" src="assets/logos/astrazeneca.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>AstraZeneca</strong><span>Product Designer</span></p>
+              <p class="job__meta">12/2025 – 06/2026 · Remote</p>
+              <ul class="job__notes">
+              <li>Providing design guidance and solutions across multiple pharma industry initiatives, translating complex clinical and operational workflows into clear, human-centred digital experiences.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="job">
+            <img class="job__logo" src="assets/logos/sensei.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>Sensei</strong><span>Product Designer</span></p>
+              <p class="job__meta">05/2025 – 12/2025 · Lisbon, PT</p>
+              <ul class="job__notes">
+              <li>Involved in the design process for the creation of the first parapharmacy totally autonomous in Europe.</li>
+              <li>Designed, handed-off, and collaborated actively with the development team on the Web App and Mobile App.</li>
+              </ul>
+            </div>
+          </article>
+      </div>
+      <footer class="modal__foot">
+        <a class="cta cta--small" href="https://drive.google.com/file/d/14qPH3ANQL8dysrcKLIsAA15_PM9UK4ti/view?usp=sharing" target="_blank" rel="noopener"><span class="cta__track"><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-news"/></svg><span class="cta__label">Full resume</span><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-open"/></svg></span></a>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-retail" role="dialog" aria-modal="true" aria-labelledby="modal-retail-title" hidden>
+    <div class="modal__scrim" data-close></div>
+    <div class="modal__panel" tabindex="-1">
+      <header class="modal__head">
+        <span class="badge__icon modal__icon badge__icon--dark" style="--c:#F4F983"><svg width="16" height="16" aria-hidden="true"><use href="#i-store"/></svg></span>
+        <div class="modal__heading">
+          <p class="modal__eyebrow">Work experience</p>
+          <h2 class="modal__title" id="modal-retail-title">Retail</h2>
+        </div>
+        <button class="modal__close" type="button" data-close aria-label="Close"><kbd>Esc</kbd><span class="only-fine">to close</span><span class="only-touch">Close</span></button>
+      </header>
+      <p class="modal__lede">A store with no queue and no till: designing the shopping experience of Europe’s first fully autonomous parapharmacy.</p>
+      <div class="jobs">
+          <article class="job">
+            <img class="job__logo" src="assets/logos/sensei.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>Sensei</strong><span>Product Designer</span></p>
+              <p class="job__meta">05/2025 – 12/2025 · Lisbon, PT</p>
+              <ul class="job__notes">
+              <li>Involved in the design process for the creation of the first parapharmacy totally autonomous in Europe.</li>
+              <li>Designed, handed-off, and collaborated actively with the development team on the Web App and Mobile App.</li>
+              <li>Creation of the Design Systems that defines Sensei new design language and ensures consistency.</li>
+              </ul>
+            </div>
+          </article>
+      </div>
+      <footer class="modal__foot">
+        <a class="cta cta--small" href="https://drive.google.com/file/d/14qPH3ANQL8dysrcKLIsAA15_PM9UK4ti/view?usp=sharing" target="_blank" rel="noopener"><span class="cta__track"><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-news"/></svg><span class="cta__label">Full resume</span><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-open"/></svg></span></a>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-telecommunications" role="dialog" aria-modal="true" aria-labelledby="modal-telecommunications-title" hidden>
+    <div class="modal__scrim" data-close></div>
+    <div class="modal__panel" tabindex="-1">
+      <header class="modal__head">
+        <span class="badge__icon modal__icon" style="--c:#FF4546"><svg width="16" height="16" aria-hidden="true"><use href="#i-phone"/></svg></span>
+        <div class="modal__heading">
+          <p class="modal__eyebrow">Work experience</p>
+          <h2 class="modal__title" id="modal-telecommunications-title">Telecommunications</h2>
+        </div>
+        <button class="modal__close" type="button" data-close aria-label="Close"><kbd>Esc</kbd><span class="only-fine">to close</span><span class="only-touch">Close</span></button>
+      </header>
+      <p class="modal__lede">Nearly two years leading design for 8x8’s communications platform, from integrations to the supervisor experience.</p>
+      <div class="jobs">
+          <article class="job">
+            <img class="job__logo" src="assets/logos/8x8.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>8x8</strong><span>Lead Product Designer</span></p>
+              <p class="job__meta">12/2022 – 09/2024 · Remote</p>
+              <ul class="job__notes">
+              <li>Led the design vertical of Integrations, while collaborating with Google, Microsoft, and Salesforce.</li>
+              <li>Contributed greatly to the design of Work App, Jitsi, and Oxygen DS, enhancing usability, engagement, and good design practices.</li>
+              <li>Drove the Integrations App Store’s innovation.</li>
+              <li>Contributed to the Supervisor App’s development, ensuring a seamless handoff for implementation.</li>
+              </ul>
+            </div>
+          </article>
+      </div>
+      <footer class="modal__foot">
+        <a class="cta cta--small" href="https://drive.google.com/file/d/14qPH3ANQL8dysrcKLIsAA15_PM9UK4ti/view?usp=sharing" target="_blank" rel="noopener"><span class="cta__track"><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-news"/></svg><span class="cta__label">Full resume</span><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-open"/></svg></span></a>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-design-systems" role="dialog" aria-modal="true" aria-labelledby="modal-design-systems-title" hidden>
+    <div class="modal__scrim" data-close></div>
+    <div class="modal__panel" tabindex="-1">
+      <header class="modal__head">
+        <span class="badge__icon modal__icon" style="--c:#007AFF"><svg width="16" height="16" aria-hidden="true"><use href="#i-token"/></svg></span>
+        <div class="modal__heading">
+          <p class="modal__eyebrow">Work experience</p>
+          <h2 class="modal__title" id="modal-design-systems-title">Design Systems</h2>
+        </div>
+        <button class="modal__close" type="button" data-close aria-label="Close"><kbd>Esc</kbd><span class="only-fine">to close</span><span class="only-touch">Close</span></button>
+      </header>
+      <p class="modal__lede">Five systems and UI kits, from first token to adoption across product lines.</p>
+      <div class="jobs">
+          <article class="job">
+            <img class="job__logo" src="assets/logos/sensei.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>Sensei</strong><span>Product Designer</span></p>
+              <p class="job__meta">05/2025 – 12/2025 · Lisbon, PT</p>
+              <ul class="job__notes">
+              <li>Creation of the Design Systems that defines Sensei new design language and ensures consistency.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="job">
+            <img class="job__logo" src="assets/logos/8x8.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>8x8</strong><span>Lead Product Designer</span></p>
+              <p class="job__meta">12/2022 – 09/2024 · Remote</p>
+              <ul class="job__notes">
+              <li>Contributed greatly to the design of Work App, Jitsi, and Oxygen DS, enhancing usability, engagement, and good design practices.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="job">
+            <img class="job__logo" src="assets/logos/feedzai.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>Feedzai</strong><span>Senior Product Designer</span></p>
+              <p class="job__meta">07/2021 – 12/2022 · Remote</p>
+              <ul class="job__notes">
+              <li>Pioneered the Design System, bridging creativity and functionality to streamline collaboration and accelerate iteration across teams.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="job">
+            <img class="job__logo" src="assets/logos/papersoft.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>Papersoft</strong><span>Senior Product Designer</span></p>
+              <p class="job__meta">08/2019 – 06/2020 · Lisbon, PT</p>
+              <ul class="job__notes">
+              <li>Developed a cohesive UI Kit, unifying design efforts while fostering creativity across teams.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="job">
+            <img class="job__logo" src="assets/logos/apiax.png" alt="" width="40" height="40" loading="lazy">
+            <div class="job__content">
+              <p class="job__title"><strong>Apiax</strong><span>Product Designer</span></p>
+              <p class="job__meta">10/2018 – 08/2019 · Lisbon, PT</p>
+              <ul class="job__notes">
+              <li>Developed a cohesive UI Kit, ensuring a unified design language across products.</li>
+              </ul>
+            </div>
+          </article>
+      </div>
+      <footer class="modal__foot">
+        <a class="cta cta--small" href="https://drive.google.com/file/d/14qPH3ANQL8dysrcKLIsAA15_PM9UK4ti/view?usp=sharing" target="_blank" rel="noopener"><span class="cta__track"><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-news"/></svg><span class="cta__label">Full resume</span><svg class="cta__icon" width="16" height="16" aria-hidden="true"><use href="#i-open"/></svg></span></a>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal modal--window" id="modal-jammin" role="dialog" aria-modal="true" aria-labelledby="modal-jammin-title" hidden>
+    <div class="modal__scrim" data-close></div>
+    <div class="modal__panel" tabindex="-1">
+      <header class="window__bar">
+        <div class="window__controls">
+          <button class="control control--close" type="button" aria-label="Close window" data-close></button>
+          <span class="control"></span>
+          <span class="control"></span>
+        </div>
+        <h2 class="window__title" id="modal-jammin-title">Jammin’</h2>
+        <div class="window__controls"></div>
+      </header>
+      <!-- The demo loads when the window opens and unloads when it closes, so audio never plays in the background. -->
+      <iframe class="embed" title="Jammin’ studio demo" data-src="https://dev.jamminstudio.co/demo" allow="microphone"></iframe>
+    </div>
+  </div>
+
+  <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 
   <div class="cursor" id="cursor" aria-hidden="true">
     <svg width="32" height="32"><use href="#i-expand"/></svg>

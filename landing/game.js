@@ -6,6 +6,9 @@
  * from the game; networking, rooms, packs and menus are left out.
  *
  * States: idle → launching → playing → (over) → closing → idle
+ *
+ * Idle: the ship is a giant cursor floating in space. Hovering it gives it a
+ * little tweak; clicking it (not the empty space around it) starts the game.
  */
 (function () {
   'use strict';
@@ -28,7 +31,7 @@
           [-1.05,-0.22],[-1.05,0.22],[-0.75,0.32],[-0.95,1.05],[-0.55,1.05],[-0.1,0.3],[0.35,0.28]]
   };
   const METEOR_R = [11, 20, 32];
-  const IDLE_SCALE = 1.5;
+  const IDLE_SCALE = 2.2;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -104,6 +107,8 @@
   const keys = {};
   const stick = { active: false, id: null, ox: 0, oy: 0, dx: 0, dy: 0 };
   let firePointer = null;
+  // idle hover: hoverAmt eases 0..1, tweak is a damped spring on the ship's angle
+  let hovered = false, hoverAmt = 0, tweak = 0, tweakV = 0;
   const player = {
     x: 0, y: 0, vx: 0, vy: 0, r: 13, hearts: 3, invuln: 0, cooldown: 0,
     scale: IDLE_SCALE, trail: [], fromX: 0, fromY: 0, fromS: IDLE_SCALE
@@ -326,11 +331,18 @@
       }
     }
 
+    // the tweak spring settles in every state so a hover mid-close still lands softly
+    tweakV += (-tweak * 170 - tweakV * 9) * dt;
+    tweak += tweakV * dt;
+    hoverAmt += ((hovered && state === 'idle' ? 1 : 0) - hoverAmt) * Math.min(1, dt * 10);
+
     if (state === 'idle') {
-      player.scale = IDLE_SCALE;
-      player.x = homeX();
-      player.y = homeY() + (reduceMotion ? 0 : Math.sin(stateT * 1.6) * 5);
-      player.vy = reduceMotion ? 0 : Math.cos(stateT * 1.6) * 8;
+      // adrift: a slow figure-of-eight around the middle of the block
+      const t = reduceMotion ? 0 : stateT;
+      player.scale = IDLE_SCALE * (1 + 0.07 * hoverAmt);
+      player.x = homeX() + Math.sin(t * 0.45) * Math.min(W * 0.05, 36);
+      player.y = homeY() + Math.sin(t * 0.9) * 7;
+      player.vy = reduceMotion ? 0 : Math.cos(t * 0.9) * 7 * 0.9;
     } else if (state === 'launching') {
       // ship banks and glides to the left of the arena, then the fight starts
       const t = Math.min(1, stateT / 1.1);
@@ -495,11 +507,20 @@
   }
 
   // ------------------------------------------------------------ drawing (ported)
-  function drawShip(x, y, bank, s) {
+  function drawShip(x, y, bank, s, glow = 0) {
     const u = 15 * s;
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(bank);
+    if (glow > 0.01) {
+      // engines spool up while the ship is hovered
+      ctx.fillStyle = SHIP.main;
+      for (const side of [-1, 1]) {
+        ctx.globalAlpha = 0.18 * glow;
+        ctx.beginPath(); ctx.arc(HULL.engX * u - 4 * glow, side * HULL.engY * u, 7 * Math.sqrt(s) * glow, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
     ctx.strokeStyle = SHIP.main;
     ctx.fillStyle = SHIP.main + '14';
     ctx.lineWidth = 1.6;
@@ -675,7 +696,7 @@
       }
       ctx.globalAlpha = 1;
       const blink = player.invuln > 0 && Math.floor(player.invuln * 12) % 2 === 0;
-      if (!blink) drawShip(player.x, player.y, Math.max(-0.35, Math.min(0.35, player.vy * 0.00035 * (state === 'playing' ? 1 : 3))), player.scale);
+      if (!blink) drawShip(player.x, player.y, Math.max(-0.35, Math.min(0.35, player.vy * 0.00035 * (state === 'playing' ? 1 : 3))) + tweak, player.scale, hoverAmt);
     }
 
     ctx.restore();
@@ -721,6 +742,7 @@
 
   window.addEventListener('keydown', e => {
     if (state === 'idle') return;
+    if (document.querySelector('.modal:not([hidden])')) return; // a badge window has the keyboard
     const k = keyName(e);
     if (k === 'Escape') { e.preventDefault(); close(); return; }
     if (state === 'over' && (k === 'Enter' || k === ' ') && document.activeElement !== overClose) {
@@ -734,7 +756,35 @@
   window.addEventListener('keyup', e => { keys[keyName(e)] = false; });
   window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
 
-  startBtn.addEventListener('click', open);
+  // the start button covers the block (and keeps the game reachable by keyboard),
+  // but a pointer only launches when it lands on the ship itself
+  function overShip(e) {
+    const r = canvas.getBoundingClientRect();
+    const dx = e.clientX - r.left - (player.x + 4 * player.scale);
+    const dy = e.clientY - r.top - player.y;
+    const reach = 15 * player.scale * (e.pointerType === 'touch' ? 1.9 : 1.3);
+    return dx * dx + dy * dy < reach * reach;
+  }
+  function setHover(on) {
+    if (on === hovered) return;
+    hovered = on;
+    arena.classList.toggle('ship-hover', on);
+    if (on && !reduceMotion) tweakV += (Math.random() < 0.5 ? -1 : 1) * 4.2;
+    wake();
+  }
+  let lastPointer = 'mouse';
+  startBtn.addEventListener('pointermove', e => { lastPointer = e.pointerType; if (e.pointerType !== 'touch') setHover(state === 'idle' && overShip(e)); });
+  startBtn.addEventListener('pointerdown', e => { lastPointer = e.pointerType; });
+  startBtn.addEventListener('pointerleave', () => setHover(false));
+  startBtn.addEventListener('click', e => {
+    // detail 0 = keyboard (Enter / Space on the focused button)
+    if (e.detail === 0 || overShip({ clientX: e.clientX, clientY: e.clientY, pointerType: lastPointer })) {
+      setHover(false);
+      open();
+    } else if (!reduceMotion) {
+      tweakV += (Math.random() < 0.5 ? -1 : 1) * 1.6; // a nudge, so a miss still feels heard
+    }
+  });
   closeBtn.addEventListener('click', close);
   overClose.addEventListener('click', close);
   againBtn.addEventListener('click', playAgain);
@@ -775,5 +825,5 @@
   player.x = homeX(); player.y = homeY();
   wake();
 
-  window.SweetSpaceship = { open, close, get state() { return state; } };
+  window.SweetSpaceship = { open, close, get state() { return state; }, get ship() { return { x: player.x, y: player.y }; } };
 })();

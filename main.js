@@ -1,233 +1,381 @@
-const windows = document.querySelectorAll('[data-window]');
-const railApps = document.querySelectorAll('.app');
-const jobList = document.querySelector('.jobs');
+/* Landing v2 interactions:
+ *  1. dot cursor: an 8px white dot replaces the system cursor; it fades over
+ *     the Testimonials / Portfolio / Resume pills and becomes the 32px glass
+ *     "expand" cursor over the badges
+ *  2. crown drag: drop the header crown on Diogo's photo for party poppers
+ *  3. badge windows: About, the four industries, and the Jammin' DAW
+ */
+(function () {
+  'use strict';
 
-const isPhone = window.matchMedia('(max-width: 760px)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-// Embeds load only while their window is open, so audio never keeps playing in the background.
-function setVisible(win, visible) {
-  win.hidden = !visible;
-  // A window's default size, measured the first time it opens, is its minimum size.
-  if (visible && !win.dataset.minWidth && !isPhone.matches) {
-    win.dataset.minWidth = win.offsetWidth;
-    win.dataset.minHeight = win.offsetHeight;
+  // ------------------------------------------------------------ 1. dot cursor
+  const cursor = document.getElementById('cursor');
+  let x = -100, y = -100, cx = -100, cy = -100, raf = 0;
+  let mode = '';       // '' dot | 'expand' | 'gone'
+  let suppressed = false; // the crown is being dragged, so the crown is the cursor
+
+  function loop() {
+    // the dot sticks close to the pointer; the bigger expand cursor trails a touch more
+    const k = mode === 'expand' ? 0.35 : 0.6;
+    cx += (x - cx) * k;
+    cy += (y - cy) * k;
+    cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(var(--press))`;
+    if (Math.abs(x - cx) > 0.1 || Math.abs(y - cy) > 0.1) raf = requestAnimationFrame(loop);
+    else raf = 0;
   }
-  const embed = win.querySelector('iframe[data-src]');
-  if (!embed) return;
-  if (visible && !embed.src) embed.src = embed.dataset.src;
-  if (!visible) embed.removeAttribute('src');
-}
+  function kick() { if (!raf) raf = requestAnimationFrame(loop); }
 
-// Stacking, like macOS: the window you click or open comes to the front;
-// the others stay open behind it and look inactive.
-let topZ = 10; // The dock sits above every window at z-index 10000.
-
-function bringToFront(win) {
-  if (win.classList.contains('is-front')) return;
-  windows.forEach(other => other.classList.remove('is-front'));
-  win.classList.add('is-front');
-  win.style.zIndex = ++topZ;
-}
-
-// When the front window closes, the next one down becomes active.
-function focusTopmost(except) {
-  const open = [...windows].filter(win => !win.hidden && win !== except && win.genieDirection !== 'close');
-  if (!open.length) return;
-  bringToFront(open.reduce((top, win) => (Number(win.style.zIndex) > Number(top.style.zIndex) ? win : top)));
-}
-
-// A window opening for the first time cascades down-right of the windows already
-// open, so it doesn't land exactly on top of one. Afterwards it remembers where it was left.
-function cascade(win) {
-  if (win.dataset.placed || isPhone.matches) return;
-  win.dataset.placed = 'true';
-  const others = [...windows].filter(other => other !== win && !other.hidden).length;
-  if (!others) return;
-  const step = 28 * Math.min(others, 4);
-  const { left, top } = getComputedStyle(win);
-  win.style.left = `${parseFloat(left) + step}px`;
-  win.style.top = `${parseFloat(top) + step}px`;
-}
-
-// `source` is the clicked control; a newly opened window grows out of it.
-function openWindow(id, job, source) {
-  const win = document.getElementById(id);
-  const wasOpen = !win.hidden && win.genieDirection !== 'close';
-
-  if (wasOpen) {
-    bringToFront(win);
-  } else {
-    cascade(win);
-    setVisible(win, true);
-    bringToFront(win);
-    genie(win, source || launcherFor(id), 'open');
+  function modeFor(el) {
+    if (!el || !el.closest) return '';
+    if (el.closest('.ctas .cta:not(.cta--primary)')) return 'gone';
+    // the arena has its own cursor: the floating one when hovered, the ship while playing
+    if (el.closest('.arena.ship-hover, .arena.is-open')) return 'gone';
+    if (el.closest('.badge')) return 'expand';
+    return '';
+  }
+  function setMode(m) {
+    if (m === mode) return;
+    mode = m;
+    cursor.classList.toggle('is-expand', m === 'expand');
+    cursor.classList.toggle('is-gone', m === 'gone' || suppressed);
+  }
+  // content can change under a still pointer (a window opens or closes), so re-read what's there
+  function refreshCursor() {
+    if (!cursor || !document.documentElement.classList.contains('dot-cursor')) return;
+    setMode(modeFor(document.elementFromPoint(x, y)));
+  }
+  function suppressCursor(on) {
+    suppressed = on;
+    cursor.classList.toggle('is-gone', on || mode === 'gone');
   }
 
-  if (id === 'work') {
-    railApps.forEach(app => app.classList.toggle('is-active', Boolean(job) && app.dataset.job === job));
-    highlightJob(job);
+  if (cursor) {
+    document.addEventListener('pointermove', e => {
+      if (e.pointerType !== 'mouse' || !fine.matches) return;
+      if (!document.documentElement.classList.contains('dot-cursor')) {
+        document.documentElement.classList.add('dot-cursor');
+        cx = e.clientX; cy = e.clientY;
+      }
+      x = e.clientX; y = e.clientY;
+      cursor.classList.add('is-visible');
+      setMode(modeFor(e.target));
+      kick();
+    }, { passive: true });
+
+    document.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse') cursor.classList.add('is-down'); });
+    document.addEventListener('pointerup', () => cursor.classList.remove('is-down'));
+    // leaving the window, or moving into the Jammin' iframe (which draws its own cursor)
+    document.addEventListener('mouseout', e => { if (!e.relatedTarget) cursor.classList.remove('is-visible'); });
+    window.addEventListener('blur', () => cursor.classList.remove('is-visible', 'is-down'));
   }
-}
 
-function highlightJob(job) {
-  document.querySelectorAll('.job').forEach(el => el.classList.toggle('is-active', el.id === `job-${job}`));
+  // ------------------------------------------------------------ 2. crown → photo = party poppers
+  const logo = document.querySelector('.logo');
+  const crown = logo && logo.querySelector('img');
+  const nameBadge = document.querySelector('.badge--first');
+  const avatar = nameBadge && nameBadge.querySelector('.badge__avatar');
+  const confettiCanvas = document.getElementById('confetti');
 
-  const entry = job && document.getElementById(`job-${job}`);
-  jobList.scrollTo({ top: entry ? entry.offsetTop - jobList.offsetTop : 0, behavior: 'smooth' });
-}
+  if (logo && crown && avatar) {
+    let drag = null, swallowClick = false;
 
-document.querySelectorAll('[data-open]').forEach(button => {
-  button.addEventListener('click', () => openWindow(button.dataset.open, button.dataset.job, button));
-});
+    const overAvatar = (px, py) => {
+      const r = nameBadge.getBoundingClientRect();
+      const pad = 14;
+      return px > r.left - pad && px < r.left + r.height + 24 + pad && py > r.top - pad && py < r.bottom + pad;
+    };
 
-// The icon a window collapses into: its dock icon, or the rail's Work folder on desktop.
-function launcherFor(id) {
-  const candidates = document.querySelectorAll(`.dock [data-open="${id}"], .rail [data-open="${id}"]:not([data-job])`);
-  return [...candidates].find(el => el.offsetParent !== null);
-}
-
-// macOS-style "genie": closing funnels the window into a trapezoid and shrinks it
-// into its icon; opening plays the same motion backwards, out of the icon.
-// Skipped for people who prefer reduced motion. Resolves true if it ran to the end.
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-function genie(win, icon, direction) {
-  // Interrupting (e.g. reopening mid-close) starts the new motion from the window's real position.
-  win.genie?.cancel();
-  if (!icon || prefersReducedMotion.matches) return Promise.resolve(true);
-
-  const from = win.getBoundingClientRect();
-  const to = icon.getBoundingClientRect();
-  // Transforms run from the window's bottom centre, so these move it onto the icon's bottom centre.
-  const dx = (to.left + to.width / 2) - (from.left + from.width / 2);
-  const dy = to.bottom - from.bottom;
-  const sx = to.width / from.width;
-  const sy = to.height / from.height;
-
-  // Every keyframe uses the same transform functions so the browser interpolates them smoothly.
-  const frame = (x, y, tilt, scaleX, scaleY) =>
-    `translate(${x}px, ${y}px) perspective(700px) rotateX(${tilt}deg) scale(${scaleX}, ${scaleY})`;
-
-  win.style.transformOrigin = '50% 100%';
-  win.style.pointerEvents = 'none';
-  const animation = win.animate([
-    { transform: frame(0, 0, 0, 1, 1), opacity: 1 },
-    { transform: frame(dx * 0.2, dy * 0.25, -28, 0.62, 0.78), opacity: 1, offset: 0.45 },
-    { transform: frame(dx, dy, -10, sx, sy), opacity: 0.3 },
-  ], {
-    duration: 480,
-    easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
-    direction: direction === 'open' ? 'reverse' : 'normal',
-  });
-  win.genie = animation;
-  win.genieDirection = direction;
-
-  const settle = completed => {
-    if (win.genie !== animation) return completed;
-    win.genie = null;
-    win.genieDirection = null;
-    win.style.transformOrigin = '';
-    win.style.pointerEvents = '';
-    return completed;
-  };
-  return animation.finished.then(() => settle(true), () => settle(false));
-}
-
-async function collapse(win) {
-  if (await genie(win, launcherFor(win.id), 'close')) setVisible(win, false);
-}
-
-document.querySelectorAll('[data-close]').forEach(button => {
-  button.addEventListener('click', () => {
-    const win = button.closest('[data-window]');
-    collapse(win);
-    // Like macOS, the next window becomes active as soon as you click close.
-    if (win.classList.contains('is-front')) {
-      win.classList.remove('is-front');
-      focusTopmost(win);
+    function place(g, px, py, rot, s) {
+      g.style.transform = `translate3d(${px}px, ${py}px, 0) rotate(${rot}deg) scale(${s})`;
     }
-    if (win.id === 'work') railApps.forEach(app => app.classList.remove('is-active'));
+
+    logo.addEventListener('dragstart', e => e.preventDefault());
+
+    logo.addEventListener('pointerdown', e => {
+      if (e.button !== 0 || drag) return;
+      drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, x: e.clientX, y: e.clientY, vx: 0, ghost: null, rot: 0, raf: 0 };
+      logo.setPointerCapture(e.pointerId);
+    });
+
+    logo.addEventListener('pointermove', e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      if (!drag.ghost) {
+        if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 5) return;
+        const g = crown.cloneNode();
+        g.className = 'crown-ghost';
+        g.removeAttribute('width'); g.removeAttribute('height');
+        document.body.appendChild(g);
+        drag.ghost = g;
+        logo.classList.add('is-lifted');
+        suppressCursor(true);
+        const tick = () => {
+          // the crown swings with the pointer's speed, like it's hanging off it
+          drag.rot += (Math.max(-28, Math.min(28, drag.vx * 1.4)) - drag.rot) * 0.18;
+          drag.vx *= 0.82;
+          place(drag.ghost, drag.x, drag.y, drag.rot, 1);
+          drag.raf = requestAnimationFrame(tick);
+        };
+        drag.raf = requestAnimationFrame(tick);
+      }
+      drag.vx += (e.clientX - drag.x) * 0.5;
+      drag.x = e.clientX; drag.y = e.clientY;
+      nameBadge.classList.toggle('is-target', overAvatar(drag.x, drag.y));
+    });
+
+    function endDrag(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      const d = drag; drag = null;
+      if (!d.ghost) return; // a plain click on the logo
+      swallowClick = true;
+      setTimeout(() => { swallowClick = false; }, 0);
+      cancelAnimationFrame(d.raf);
+      suppressCursor(false);
+      const hit = e.type === 'pointerup' && overAvatar(d.x, d.y);
+      nameBadge.classList.remove('is-target');
+      if (hit) crownLanded(d); else flyHome(d.ghost, d.x, d.y, d.rot);
+    }
+    logo.addEventListener('pointerup', endDrag);
+    logo.addEventListener('pointercancel', endDrag);
+    logo.addEventListener('click', e => { if (swallowClick) { e.preventDefault(); swallowClick = false; } }, true);
+
+    function flyHome(g, fx, fy, rot) {
+      const r = crown.getBoundingClientRect();
+      const tx = r.left + r.width / 2, ty = r.top + r.height / 2;
+      const a = g.animate([
+        { transform: `translate3d(${fx}px, ${fy}px, 0) rotate(${rot}deg) scale(1)` },
+        { transform: `translate3d(${tx}px, ${ty}px, 0) rotate(0deg) scale(${r.width / 46})` }
+      ], { duration: reduceMotion ? 1 : 420, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' });
+      a.onfinish = () => { g.remove(); logo.classList.remove('is-lifted'); };
+    }
+
+    function crownLanded(d) {
+      const g = d.ghost;
+      const r = avatar.getBoundingClientRect();
+      const ax = r.left + r.width / 2, ay = r.top + r.height / 2;
+      // the crown settles on Diogo's head, a little jaunty
+      const sit = `translate3d(${ax}px, ${r.top - 6}px, 0) rotate(-14deg) scale(0.52)`;
+      const a = g.animate([
+        { transform: `translate3d(${d.x}px, ${d.y}px, 0) rotate(${d.rot}deg) scale(1)` },
+        { transform: sit }
+      ], { duration: reduceMotion ? 1 : 260, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'forwards' });
+      a.onfinish = () => {
+        partyPoppers(ax, ay);
+        avatar.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }],
+          { duration: 420, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+        setTimeout(() => {
+          g.style.transform = sit;
+          a.cancel();
+          flyHome(g, ax, r.top - 6, -14);
+        }, 1800);
+      };
+    }
+  }
+
+  // party poppers: two cones of confetti fired up and out from (ox, oy)
+  let bits = [], confRaf = 0, confLast = 0;
+  const COLORS = ['#3ED29C', '#F4F983', '#FF4546', '#007AFF', '#FF76A2', '#FFFFFF'];
+
+  function partyPoppers(ox, oy) {
+    if (!confettiCanvas) return;
+    const n = reduceMotion ? 40 : 90;
+    for (const dir of [-1, 1]) {
+      for (let i = 0; i < n; i++) {
+        const ang = (-90 + dir * (28 + Math.random() * 42)) * Math.PI / 180;
+        const sp = 520 + Math.random() * 760;
+        const kind = Math.random();
+        bits.push({
+          x: ox + dir * 8, y: oy, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp,
+          w: 5 + Math.random() * 6, h: kind < 0.75 ? 3 + Math.random() * 3 : 10 + Math.random() * 8,
+          round: kind > 0.9, rot: Math.random() * Math.PI * 2, vr: (Math.random() - 0.5) * 18,
+          flip: Math.random() * Math.PI * 2, vf: 6 + Math.random() * 10,
+          color: COLORS[(Math.random() * COLORS.length) | 0], life: 2.4 + Math.random() * 1.2, age: 0
+        });
+      }
+    }
+    if (!confRaf) { confLast = 0; confRaf = requestAnimationFrame(confettiFrame); }
+  }
+
+  function confettiFrame(ts) {
+    const c = confettiCanvas, ctx = c.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = window.innerWidth, h = window.innerHeight;
+    if (c.width !== w * dpr || c.height !== h * dpr) { c.width = w * dpr; c.height = h * dpr; }
+    const dt = confLast ? Math.min((ts - confLast) / 1000, 0.05) : 0.016;
+    confLast = ts;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    const drag = Math.pow(0.12, dt); // air resistance, per second
+    for (const b of bits) {
+      b.age += dt;
+      b.vx *= drag; b.vy = b.vy * drag + 1500 * dt;
+      b.vx += Math.sin(b.flip) * 30 * dt; // flutter
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      b.rot += b.vr * dt; b.flip += b.vf * dt;
+      const fade = Math.min(1, (b.life - b.age) / 0.6);
+      if (fade <= 0) continue;
+      ctx.globalAlpha = fade;
+      ctx.fillStyle = b.color;
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(b.rot);
+      ctx.scale(1, Math.cos(b.flip));
+      if (b.round) { ctx.beginPath(); ctx.arc(0, 0, b.w / 2, 0, Math.PI * 2); ctx.fill(); }
+      else ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+    bits = bits.filter(b => b.age < b.life && b.y < h + 40);
+    if (bits.length) confRaf = requestAnimationFrame(confettiFrame);
+    else { confRaf = 0; ctx.clearRect(0, 0, w, h); }
+  }
+
+  // ------------------------------------------------------------ 3. badge windows
+  let openModal = null, opener = null;
+
+  function focusables(m) {
+    return [...m.querySelectorAll('a[href], button, iframe, [tabindex]:not([tabindex="-1"])')]
+      .filter(el => !el.closest('[hidden]') && el.getClientRects().length);
+  }
+
+  function showModal(key, from) {
+    const m = document.getElementById('modal-' + key);
+    if (!m || openModal === m) return;
+    if (openModal) hideModal(true);
+    openModal = m; opener = from || null;
+    m.hidden = false;
+    document.documentElement.classList.add('modal-open');
+    const frame = m.querySelector('iframe[data-src]');
+    if (frame) {
+      const fb = m.querySelector('.embed-fallback');
+      if (fb) fb.hidden = !embedBlocked;
+      frame.src = frame.dataset.src;
+    }
+
+    // the window grows out of the badge that opened it
+    const panel = m.querySelector('.modal__panel');
+    const scrim = m.querySelector('.modal__scrim');
+    panel.scrollTop = 0;
+    const to = panel.getBoundingClientRect();
+    let fromT = 'translate(0, 16px) scale(0.96)';
+    if (from) {
+      const b = from.getBoundingClientRect();
+      const dx = b.left + b.width / 2 - (to.left + to.width / 2);
+      const dy = b.top + b.height / 2 - (to.top + to.height / 2);
+      fromT = `translate(${dx}px, ${dy}px) scale(${Math.max(0.08, b.width / to.width)}, ${Math.max(0.04, b.height / to.height)})`;
+    }
+    const dur = reduceMotion ? 1 : 460;
+    panel.animate([{ transform: fromT, opacity: 0, borderRadius: '100px' }, { transform: 'none', opacity: 1 }],
+      { duration: dur, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+    scrim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: dur * 0.7, easing: 'ease-out' });
+    panel.focus({ preventScroll: true });
+    refreshCursor();
+    if (location.hash !== '#' + key) history.replaceState(null, '', '#' + key);
+  }
+
+  function hideModal(instant) {
+    const m = openModal;
+    if (!m) return;
+    openModal = null;
+    const panel = m.querySelector('.modal__panel');
+    const scrim = m.querySelector('.modal__scrim');
+    const back = opener; opener = null;
+    const done = () => {
+      m.hidden = true;
+      const frame = m.querySelector('iframe[data-src]');
+      if (frame) frame.removeAttribute('src');
+      if (!openModal) document.documentElement.classList.remove('modal-open');
+      refreshCursor();
+    };
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    if (back) back.focus({ preventScroll: true });
+    if (instant || reduceMotion) { done(); return; }
+    let toT = 'translate(0, 12px) scale(0.97)';
+    if (back) {
+      const b = back.getBoundingClientRect(), to = panel.getBoundingClientRect();
+      toT = `translate(${b.left + b.width / 2 - (to.left + to.width / 2)}px, ${b.top + b.height / 2 - (to.top + to.height / 2)}px) scale(${Math.max(0.08, b.width / to.width)}, ${Math.max(0.04, b.height / to.height)})`;
+    }
+    const a = panel.animate([{ transform: 'none', opacity: 1 }, { transform: toT, opacity: 0 }],
+      { duration: 320, easing: 'cubic-bezier(0.55, 0, 0.75, 0.2)', fill: 'forwards' });
+    scrim.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, fill: 'forwards' });
+    a.onfinish = () => { a.cancel(); scrim.getAnimations().forEach(x => x.cancel()); done(); };
+  }
+
+  // Some hosts (like a sandboxed preview) aren't allowed to embed other sites.
+  // The browser reports the blocked frame, so swap the empty window for a way out.
+  let embedBlocked = false;
+  document.addEventListener('securitypolicyviolation', e => {
+    if (!/^(frame|child|default)-src/.test(e.effectiveDirective || e.violatedDirective || '')) return;
+    if (!/jamminstudio/.test(e.blockedURI || '')) return;
+    embedBlocked = true;
+    document.querySelectorAll('.embed-fallback').forEach(el => { el.hidden = false; });
   });
-});
 
-// Pressing anywhere on a window brings it forward. Background windows' embeds ignore the
-// pointer (see styles.css), so that first press reaches the window, as on macOS.
-windows.forEach(win => win.addEventListener('pointerdown', () => bringToFront(win)));
+  document.querySelectorAll('[data-modal]').forEach(b => {
+    b.addEventListener('click', e => { e.preventDefault(); showModal(b.dataset.modal, b); });
+  });
 
-// Moving and resizing, desktop only
+  document.querySelectorAll('.modal').forEach(m => {
+    m.addEventListener('click', e => { if (e.target.closest('[data-close]')) hideModal(); });
+  });
 
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  document.addEventListener('keydown', e => {
+    if (!openModal) return;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); hideModal(); return; }
+    if (e.key === 'Tab') {
+      const f = focusables(openModal);
+      if (!f.length) { e.preventDefault(); return; }
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !openModal.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }, true);
 
-// Tracks one pointer gesture; onMove receives the distance from where it started.
-function trackPointer(event, bodyClass, onMove) {
-  event.preventDefault();
-  const handle = event.currentTarget;
-  handle.setPointerCapture(event.pointerId);
-  document.body.classList.add(bodyClass);
-
-  const move = e => onMove(e.clientX - event.clientX, e.clientY - event.clientY);
-  const end = () => {
-    handle.removeEventListener('pointermove', move);
-    handle.removeEventListener('pointerup', end);
-    handle.removeEventListener('pointercancel', end);
-    document.body.classList.remove(bodyClass);
-  };
-  handle.addEventListener('pointermove', move);
-  handle.addEventListener('pointerup', end);
-  handle.addEventListener('pointercancel', end);
-}
-
-windows.forEach(win => {
-  const bar = win.querySelector('.window__bar, .testimonials__head');
-  bar.addEventListener('pointerdown', event => {
-    if (isPhone.matches || event.button !== 0 || event.target.closest('button')) return;
-    const startLeft = win.offsetLeft;
-    const startTop = win.offsetTop;
-    trackPointer(event, 'is-dragging', (dx, dy) => {
-      // Always leave part of the title bar on screen so the window can be grabbed again.
-      win.style.left = `${clamp(startLeft + dx, 80 - win.offsetWidth, window.innerWidth - 80)}px`;
-      win.style.top = `${clamp(startTop + dy, 0, window.innerHeight - 48)}px`;
+  // ------------------------------------------------------------ 4. send email
+  // A mailto link only works where a mail app is set up, and a framed preview may
+  // block it outright. So the link still tries the mail app, and a small popover
+  // offers the address to copy plus Gmail / Outlook compose links as a way out.
+  const mailpop = document.getElementById('mailpop');
+  const framed = window.top !== window.self;
+  function placeMailpop(from) {
+    const r = from.getBoundingClientRect();
+    mailpop.hidden = false;
+    const w = mailpop.offsetWidth;
+    mailpop.style.left = Math.max(16, Math.min(window.innerWidth - w - 16, r.right - w)) + 'px';
+    mailpop.style.top = (r.bottom + 10) + 'px';
+  }
+  document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+    a.addEventListener('click', e => {
+      if (framed) {
+        // inside a frame, hand the mailto to a new browsing context so the mail app can take it
+        e.preventDefault();
+        const w = window.open(a.href, '_blank');
+        if (!w) { try { window.top.location.href = a.href; } catch (err) { /* blocked: the popover covers it */ } }
+      }
+      placeMailpop(a);
     });
   });
-
-  if (!win.classList.contains('window')) return;
-
-  ['e', 's', 'se'].forEach(edge => {
-    const handle = document.createElement('div');
-    handle.className = `resize resize--${edge}`;
-    handle.setAttribute('aria-hidden', 'true');
-    win.append(handle);
-
-    handle.addEventListener('pointerdown', event => {
-      if (isPhone.matches || event.button !== 0) return;
-      const startWidth = win.offsetWidth;
-      const startHeight = win.offsetHeight;
-      trackPointer(event, 'is-resizing', (dx, dy) => {
-        if (edge !== 's') win.style.width = `${Math.max(Number(win.dataset.minWidth), startWidth + dx)}px`;
-        if (edge !== 'e') win.style.height = `${Math.max(Number(win.dataset.minHeight), startHeight + dy)}px`;
-      });
+  if (mailpop) {
+    mailpop.querySelector('[data-copy]').addEventListener('click', e => {
+      const btn = e.currentTarget, text = btn.dataset.copy;
+      const done = () => { btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy'; }, 1600); };
+      const select = () => { const r = document.createRange(); r.selectNodeContents(mailpop.querySelector('.mailpop__addr')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, select);
+      else select();
     });
-  });
-});
+    document.addEventListener('pointerdown', e => {
+      if (!mailpop.hidden && !mailpop.contains(e.target) && !e.target.closest('a[href^="mailto:"]')) mailpop.hidden = true;
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !mailpop.hidden) mailpop.hidden = true; });
+  }
 
-// The Hello window is open on load: record its minimum size and make it the active window.
-windows.forEach(win => {
-  if (win.hidden) return;
-  setVisible(win, true);
-  win.dataset.placed = 'true';
-  bringToFront(win);
-});
+  window.LandingModal = { get open() { return !!openModal; } };
 
-// Testimonials pager
-const quotes = [...document.querySelectorAll('.quote')];
-const indexLabel = document.querySelector('[data-index]');
-let current = 0;
-
-document.querySelectorAll('[data-step]').forEach(button => {
-  button.addEventListener('click', () => {
-    quotes[current].hidden = true;
-    current = (current + Number(button.dataset.step) + quotes.length) % quotes.length;
-    quotes[current].hidden = false;
-    indexLabel.textContent = current + 1;
-  });
-});
+  // deep links: diogomaiacaetano.net/#pharma opens straight into that window
+  const initial = location.hash.slice(1);
+  if (initial && document.getElementById('modal-' + initial)) {
+    showModal(initial, document.querySelector(`[data-modal="${initial}"]`));
+  }
+})();

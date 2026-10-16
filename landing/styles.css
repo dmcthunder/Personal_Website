@@ -16,8 +16,6 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --arena-h: 80px; /* a slim strip for the cursor; it only grows once clicked */
   --synth-h: 120px;
-  /* open: the arena alone, centred, with the header's 139px mirrored below it */
-  --arena-h-open: calc(100svh - 278px);
   color-scheme: dark;
 }
 
@@ -159,7 +157,15 @@ main {
   min-height: 0;
   display: grid;
   grid-template-rows: 1fr auto 1fr;
+  transition: grid-template-rows 0.7s var(--ease);
 }
+
+/* Game open: the bottom row collapses, so the game grows into the top row and
+   drags the bio down to the bottom of the window (still in view), and the bio
+   in turn pushes the synth out below the edge. */
+body:has(.arena.is-open) main { grid-template-rows: 1fr auto 0fr; }
+body:has(.arena.is-open) .page { padding-bottom: 48px; }
+.page { transition: padding-bottom 0.7s var(--ease); }
 
 .arena {
   position: relative;
@@ -174,20 +180,13 @@ main {
 }
 
 .arena.is-open {
-  /* the bio folds away and the game takes the stage, 48px clear of the header */
-  height: var(--arena-h-open);
-  min-height: 320px;
-  margin: 48px 0 0;
+  /* fills its row: 48px clear of the header, 24px above the bio */
+  height: calc(100% - 72px);
+  min-height: 200px;
+  margin: 48px 0 24px;
 }
 
-/* the bio folds away while the game is open, so the game alone sits centred */
-.bio {
-  display: grid;
-  grid-template-rows: 1fr;
-  transition: grid-template-rows 0.7s var(--ease), margin-top 0.7s var(--ease), opacity 0.4s var(--ease);
-}
-.bio > p { min-height: 0; overflow: hidden; }
-.arena.is-open + .bio { grid-template-rows: 0fr; margin-top: 0; opacity: 0; pointer-events: none; }
+
 
 .arena__canvas {
   position: absolute;
@@ -951,7 +950,10 @@ html.modal-open { overflow: hidden; }
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
+  transition: transform 0.7s var(--ease);
 }
+
+body:has(.arena.is-open) .synth { transform: translateY(100%); }
 
 .synth__keys { position: absolute; inset: 0; }
 

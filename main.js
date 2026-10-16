@@ -151,6 +151,7 @@
     }
 
     function crownLanded(d) {
+      popAudio(); // unlock audio inside the drop gesture; the pop plays when the crown lands
       const g = d.ghost;
       const r = avatar.getBoundingClientRect();
       const ax = r.left + r.width / 2, ay = r.top + r.height / 2;
@@ -177,8 +178,79 @@
   let bits = [], confRaf = 0, confLast = 0;
   const COLORS = ['#3ED29C', '#F4F983', '#FF4546', '#007AFF', '#FF76A2', '#FFFFFF'];
 
+  // the "pop": a sharp burst of filtered noise with a low thump under it,
+  // then a short crackle of paper streamers. Two of them, one per cone.
+  let popAc = null;
+  function popAudio() {
+    if (popAc) { if (popAc.state !== 'running') popAc.resume(); return popAc; }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    try { popAc = new AC({ latencyHint: 0 }); } catch (e) { try { popAc = new AC(); } catch (e2) { return null; } }
+    return popAc;
+  }
+  function noiseBuffer(ctx, secs) {
+    const buf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * secs), ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return buf;
+  }
+  function popSound(ctx, t, pan) {
+    const out = ctx.createGain();
+    out.gain.value = 0.55;
+    if (ctx.createStereoPanner) {
+      const p = ctx.createStereoPanner(); p.pan.value = pan;
+      out.connect(p); p.connect(ctx.destination);
+    } else out.connect(ctx.destination);
+
+    // crack
+    const crack = ctx.createBufferSource();
+    crack.buffer = noiseBuffer(ctx, 0.25);
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass'; bp.Q.value = 0.8;
+    bp.frequency.setValueAtTime(2600, t);
+    bp.frequency.exponentialRampToValueAtTime(900, t + 0.12);
+    const cg = ctx.createGain();
+    cg.gain.setValueAtTime(0.0001, t);
+    cg.gain.exponentialRampToValueAtTime(1.4, t + 0.002);
+    cg.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    crack.connect(bp); bp.connect(cg); cg.connect(out);
+    crack.start(t); crack.stop(t + 0.25);
+
+    // thump
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(190, t);
+    o.frequency.exponentialRampToValueAtTime(55, t + 0.12);
+    const og = ctx.createGain();
+    og.gain.setValueAtTime(0.0001, t);
+    og.gain.exponentialRampToValueAtTime(0.9, t + 0.004);
+    og.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    o.connect(og); og.connect(out);
+    o.start(t); o.stop(t + 0.2);
+
+    // streamers rustling as they fly
+    const rustle = ctx.createBufferSource();
+    rustle.buffer = noiseBuffer(ctx, 0.7);
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 4200;
+    const rg = ctx.createGain();
+    rg.gain.setValueAtTime(0.0001, t + 0.03);
+    rg.gain.exponentialRampToValueAtTime(0.12, t + 0.08);
+    rg.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+    rustle.connect(hp); hp.connect(rg); rg.connect(out);
+    rustle.start(t + 0.03); rustle.stop(t + 0.7);
+  }
+  function popperSound() {
+    const ctx = popAudio();
+    if (!ctx) return;
+    const t = ctx.currentTime + 0.005;
+    popSound(ctx, t, -0.4);
+    popSound(ctx, t + 0.07, 0.4);
+  }
+
   function partyPoppers(ox, oy) {
     if (!confettiCanvas) return;
+    popperSound();
     const n = reduceMotion ? 40 : 90;
     for (const dir of [-1, 1]) {
       for (let i = 0; i < n; i++) {

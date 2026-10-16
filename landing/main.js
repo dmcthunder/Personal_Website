@@ -22,7 +22,7 @@
     const k = mode === 'expand' ? 0.35 : 0.6;
     cx += (x - cx) * k;
     cy += (y - cy) * k;
-    cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%)`;
+    cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0) translate(-50%, -50%) scale(var(--press))`;
     if (Math.abs(x - cx) > 0.1 || Math.abs(y - cy) > 0.1) raf = requestAnimationFrame(loop);
     else raf = 0;
   }
@@ -246,7 +246,11 @@
     m.hidden = false;
     document.documentElement.classList.add('modal-open');
     const frame = m.querySelector('iframe[data-src]');
-    if (frame) frame.src = frame.dataset.src;
+    if (frame) {
+      const fb = m.querySelector('.embed-fallback');
+      if (fb) fb.hidden = !embedBlocked;
+      frame.src = frame.dataset.src;
+    }
 
     // the window grows out of the badge that opened it
     const panel = m.querySelector('.modal__panel');
@@ -297,6 +301,16 @@
     a.onfinish = () => { a.cancel(); scrim.getAnimations().forEach(x => x.cancel()); done(); };
   }
 
+  // Some hosts (like a sandboxed preview) aren't allowed to embed other sites.
+  // The browser reports the blocked frame, so swap the empty window for a way out.
+  let embedBlocked = false;
+  document.addEventListener('securitypolicyviolation', e => {
+    if (!/^(frame|child|default)-src/.test(e.effectiveDirective || e.violatedDirective || '')) return;
+    if (!/jamminstudio/.test(e.blockedURI || '')) return;
+    embedBlocked = true;
+    document.querySelectorAll('.embed-fallback').forEach(el => { el.hidden = false; });
+  });
+
   document.querySelectorAll('[data-modal]').forEach(b => {
     b.addEventListener('click', e => { e.preventDefault(); showModal(b.dataset.modal, b); });
   });
@@ -316,6 +330,8 @@
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
   }, true);
+
+  window.LandingModal = { get open() { return !!openModal; } };
 
   // deep links: diogomaiacaetano.net/#pharma opens straight into that window
   const initial = location.hash.slice(1);

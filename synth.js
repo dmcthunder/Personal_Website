@@ -17,8 +17,12 @@
   // ------------------------------------------------------------ sound
   let ac = null, out = null;
   function audio() {
-    if (ac) { if (ac.state === 'suspended') ac.resume(); return ac; }
-    try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+    if (ac) { if (ac.state !== 'running') ac.resume(); return ac; }
+    // ask for the shortest output buffer the device allows
+    const AC = window.AudioContext || window.webkitAudioContext;
+    try { ac = new AC({ latencyHint: 0 }); } catch (e) {
+      try { ac = new AC(); } catch (e2) { return null; }
+    }
     out = ac.createGain();
     out.gain.value = 0.22;
     // a short, soft echo so single notes feel like an instrument rather than a beep
@@ -36,6 +40,7 @@
     const ctx = audio();
     if (!ctx || voices.has(key)) return;
     const f = 261.63 * Math.pow(2, (+key.dataset.semi) / 12);
+    key.classList.add('is-down');
     const t = ctx.currentTime;
     const amp = ctx.createGain();
     const filt = ctx.createBiquadFilter();
@@ -48,15 +53,14 @@
       const og = ctx.createGain();
       o.type = type; o.frequency.value = f; o.detune.value = cents; og.gain.value = g;
       o.connect(og); og.connect(filt);
-      o.start(t);
+      o.start();
       return o;
     });
     filt.connect(amp); amp.connect(out);
     amp.gain.setValueAtTime(0.0001, t);
-    amp.gain.exponentialRampToValueAtTime(0.5, t + 0.008);
+    amp.gain.exponentialRampToValueAtTime(0.5, t + 0.004);
     amp.gain.exponentialRampToValueAtTime(0.22, t + 0.3);
     voices.set(key, { amp, oscs });
-    key.classList.add('is-down');
   }
   function noteOff(key) {
     const v = voices.get(key);
@@ -155,6 +159,14 @@
   wrap.addEventListener('pointercancel', release);
   wrap.addEventListener('pointerleave', e => { if (!held.has(e.pointerId)) setHover(null); });
   window.addEventListener('blur', () => { voices.forEach((v, k) => noteOff(k)); held.clear(); });
+
+  // Browsers only start audio after a gesture, and the first start takes a
+  // moment. Warm the engine up on the first tap or key anywhere on the page so
+  // the keyboard is already live by the time someone reaches it.
+  function warm() {
+    if (audio()) ['pointerdown', 'keydown'].forEach(t => document.removeEventListener(t, warm, true));
+  }
+  ['pointerdown', 'keydown'].forEach(t => document.addEventListener(t, warm, true));
 
   build();
   new ResizeObserver(build).observe(wrap);

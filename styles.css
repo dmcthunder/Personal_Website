@@ -405,8 +405,8 @@ kbd {
 /* ------------------------------------------------------------- custom cursor */
 
 /* An 8px white dot replaces the system cursor (main.js adds .dot-cursor for
-   mouse users only). It fades out over the Testimonials / Portfolio / Resume
-   pills and grows into the 32px glass "expand" cursor over the badges. */
+   mouse users only). It stays a white dot over the pills and grows into the
+   32px glass "expand" cursor over the badges. */
 html.dot-cursor,
 html.dot-cursor * { cursor: none !important; }
 
@@ -990,9 +990,10 @@ body:has(.arena.is-open) .synth { transform: translateY(100%); }
 .key--white.is-hover { background: #161616; box-shadow: inset 0 0 0 1px #3a3a3a; }
 .key--black.is-hover { background: #333333; }
 
-.key.is-down { opacity: 1; transition-duration: 0.04s; }
-.key--white.is-down { background: color-mix(in srgb, #FF76A2 16%, #111111); box-shadow: inset 0 0 0 1px #FF76A2; }
-.key--black.is-down { background: color-mix(in srgb, #FF76A2 45%, #222222); }
+/* pressed keys go white at once, then ease back on release */
+.key.is-down { opacity: 1; transition-duration: 0s; }
+.key--white.is-down { background: #ffffff; box-shadow: inset 0 0 0 1px #ffffff; }
+.key--black.is-down { background: #ffffff; box-shadow: 0 0 0 1px #111111; }
 
 .synth__fade {
   position: absolute;

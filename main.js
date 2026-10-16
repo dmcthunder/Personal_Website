@@ -30,7 +30,6 @@
 
   function modeFor(el) {
     if (!el || !el.closest) return '';
-    if (el.closest('.ctas .cta:not(.cta--primary)')) return 'gone';
     // the arena has its own cursor: the floating one when hovered, the ship while playing
     if (el.closest('.arena.ship-hover, .arena.is-open')) return 'gone';
     if (el.closest('.badge')) return 'expand';

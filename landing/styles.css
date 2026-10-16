@@ -14,7 +14,7 @@
   --max: 900px;
   --gutter: 24px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --arena-h: clamp(140px, calc(100svh - 520px), 221px);
+  --arena-h: 80px; /* a slim strip for the cursor; it only grows once clicked */
   --synth-h: 120px;
   /* open: the arena alone, centred, with the header's 139px mirrored below it */
   --arena-h-open: calc(100svh - 278px);
@@ -151,28 +151,33 @@ kbd {
 
 /* ------------------------------------------------------------- game arena */
 
+/* The bio is the main actor: it owns the middle row, which (with the page's
+   mirrored top/bottom padding) is the exact centre of the window. The cursor
+   strip hangs just above it in the top row and never pushes it off-centre. */
 main {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
 }
 
 .arena {
   position: relative;
-  flex: none;
+  align-self: end;
+  margin: 0 0 24px;
   height: var(--arena-h);
   background: var(--arena-bg);
   overflow: hidden;
-  transition: height 0.7s var(--ease);
+  transition: height 0.7s var(--ease), margin 0.7s var(--ease);
   user-select: none;
   -webkit-user-select: none;
 }
 
 .arena.is-open {
+  /* the bio folds away and the game takes the stage, 48px clear of the header */
   height: var(--arena-h-open);
   min-height: 320px;
+  margin: 48px 0 0;
 }
 
 /* the bio folds away while the game is open, so the game alone sits centred */
@@ -337,8 +342,7 @@ kbd {
 /* ------------------------------------------------------------- bio */
 
 .bio {
-  margin-top: 43px;
-  flex: none;
+  align-self: center;
 }
 
 .bio p {
@@ -1018,7 +1022,7 @@ html.modal-open { overflow: hidden; }
   .about__headline { font-size: 20px; }
   .bio p { font-size: 15px; line-height: 44px; }
   .bio br { display: none; }
-  :root { --arena-h: clamp(120px, calc(100svh - 640px), 180px); --synth-h: 88px; }
+  :root { --synth-h: 88px; }
   .key--black { height: 58px; }
   .synth__fade { height: 58px; }
   .tdeck__hint { display: none; }

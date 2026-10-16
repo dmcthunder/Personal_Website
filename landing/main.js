@@ -31,6 +31,8 @@
   function modeFor(el) {
     if (!el || !el.closest) return '';
     if (el.closest('.ctas .cta:not(.cta--primary)')) return 'gone';
+    // the arena has its own cursor: the floating one when hovered, the ship while playing
+    if (el.closest('.arena.ship-hover, .arena.is-open')) return 'gone';
     if (el.closest('.badge')) return 'expand';
     return '';
   }
@@ -330,6 +332,44 @@
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
   }, true);
+
+  // ------------------------------------------------------------ 4. send email
+  // A mailto link only works where a mail app is set up, and a framed preview may
+  // block it outright. So the link still tries the mail app, and a small popover
+  // offers the address to copy plus Gmail / Outlook compose links as a way out.
+  const mailpop = document.getElementById('mailpop');
+  const framed = window.top !== window.self;
+  function placeMailpop(from) {
+    const r = from.getBoundingClientRect();
+    mailpop.hidden = false;
+    const w = mailpop.offsetWidth;
+    mailpop.style.left = Math.max(16, Math.min(window.innerWidth - w - 16, r.right - w)) + 'px';
+    mailpop.style.top = (r.bottom + 10) + 'px';
+  }
+  document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+    a.addEventListener('click', e => {
+      if (framed) {
+        // inside a frame, hand the mailto to a new browsing context so the mail app can take it
+        e.preventDefault();
+        const w = window.open(a.href, '_blank');
+        if (!w) { try { window.top.location.href = a.href; } catch (err) { /* blocked: the popover covers it */ } }
+      }
+      placeMailpop(a);
+    });
+  });
+  if (mailpop) {
+    mailpop.querySelector('[data-copy]').addEventListener('click', e => {
+      const btn = e.currentTarget, text = btn.dataset.copy;
+      const done = () => { btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy'; }, 1600); };
+      const select = () => { const r = document.createRange(); r.selectNodeContents(mailpop.querySelector('.mailpop__addr')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, select);
+      else select();
+    });
+    document.addEventListener('pointerdown', e => {
+      if (!mailpop.hidden && !mailpop.contains(e.target) && !e.target.closest('a[href^="mailto:"]')) mailpop.hidden = true;
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !mailpop.hidden) mailpop.hidden = true; });
+  }
 
   window.LandingModal = { get open() { return !!openModal; } };
 

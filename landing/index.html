@@ -69,9 +69,7 @@
     <main>
       <section class="arena" id="arena" aria-label="Sweet Spaceship mini game">
         <canvas class="arena__canvas" id="arena-canvas"></canvas>
-        <button class="arena__start" id="arena-start" type="button">
-          <span class="arena__hint"><span class="only-fine">Click the ship to play</span><span class="only-touch">Tap the ship to play</span></span>
-        </button>
+        <button class="arena__start" id="arena-start" type="button" aria-label="Play Sweet Spaceship"></button>
         <div class="arena__hud" aria-live="polite">
           <div class="hud__left">
             <span class="hud__hearts" id="hud-hearts" aria-label="Hearts left"></span>
@@ -102,7 +100,7 @@
           <a class="badge badge--first" href="#about" data-modal="about">
             <img class="badge__avatar" src="assets/avatar.png" alt="" width="24" height="24"><span>Diogo Maia Caetano</span>
           </a>is a Lead Product Designer who turns complex problems into calm, intuitive
-          products. For over 10 years he’s designed for<a class="badge" href="#ai" data-modal="ai" style="--c:#3ED29C">
+          products. For over 10 years he’s designed for<a class="badge" href="#ai" data-modal="ai" style="--c:#222222">
             <span class="badge__icon"><svg width="16" height="16" aria-hidden="true"><use href="#i-spark"/></svg></span><span>AI</span>
           </a>,<a class="badge" href="#pharma" data-modal="pharma" style="--c:#3ED29C">
             <span class="badge__icon"><svg width="16" height="16" aria-hidden="true"><use href="#i-pill"/></svg></span><span>Pharma</span>
@@ -164,7 +162,7 @@
     <div class="modal__scrim" data-close></div>
     <div class="modal__panel" tabindex="-1">
       <header class="modal__head">
-        <span class="badge__icon modal__icon" style="--c:#3ED29C"><svg width="16" height="16" aria-hidden="true"><use href="#i-spark"/></svg></span>
+        <span class="badge__icon modal__icon" style="--c:#222222"><svg width="16" height="16" aria-hidden="true"><use href="#i-spark"/></svg></span>
         <div class="modal__heading">
           <p class="modal__eyebrow">Work experience</p>
           <h2 class="modal__title" id="modal-ai-title">AI</h2>
@@ -437,6 +435,20 @@
       </div>
       <p class="tdeck__hint"><span class="only-fine">Click a card for the next one, or drag it anywhere</span><span class="only-touch">Tap for the next one, or drag it anywhere</span></p>
       <button class="modal__close" type="button" data-close aria-label="Close"><kbd>Esc</kbd><span class="only-fine">to close</span><span class="only-touch">Close</span></button>
+    </div>
+  </div>
+
+  <!-- Send email: opens the mail app, and offers a copy / Gmail fallback for people without one (main.js) -->
+  <div class="mailpop" id="mailpop" role="dialog" aria-label="Email Diogo" hidden>
+    <p class="mailpop__title">Opening your email app…</p>
+    <p class="mailpop__text">Nothing happened? Use one of these instead.</p>
+    <div class="mailpop__row">
+      <span class="mailpop__addr">diogomaiacaetano@icloud.com</span>
+      <button class="mailpop__btn" type="button" data-copy="diogomaiacaetano@icloud.com">Copy</button>
+    </div>
+    <div class="mailpop__links">
+      <a class="mailpop__link" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=diogomaiacaetano@icloud.com" target="_blank" rel="noopener">Gmail</a>
+      <a class="mailpop__link" href="https://outlook.live.com/mail/0/deeplink/compose?to=diogomaiacaetano@icloud.com" target="_blank" rel="noopener">Outlook</a>
     </div>
   </div>
 

@@ -1,14 +1,16 @@
 /* Sweet Spaceship, landing edition.
  *
  * A single-player cut of github.com/dmcthunder/Sweet-Spaceship (Frontline mode)
- * that lives inside the #222 block on the landing page. Ship hull, enemy
+ * that lives inside the dark block on the landing page. Enemy
  * interceptors, meteors, explosions and the Night Sector palette are ported
  * from the game; networking, rooms, packs and menus are left out.
  *
  * States: idle → launching → playing → (over) → closing → idle
  *
- * Idle: the ship is a giant cursor floating in space. Hovering it gives it a
- * little tweak; clicking it (not the empty space around it) starts the game.
+ * Idle: there is no ship and no starfield, only a 32px cursor (Figma
+ * "cursor-arrow") floating in the dark. Hovering it tilts it -10°; clicking it
+ * fades the stars in and spins the cursor round until it faces right: the
+ * cursor *is* the ship from then on.
  */
 (function () {
   'use strict';
@@ -23,15 +25,15 @@
   };
   // slot 0, the colour reserved for the room creator: Diogo's ship
   const SHIP = { main: '#FF76A2', soft: '#FFA8C4', deep: '#E85C8C', fade: '#FFD9E6' };
+  // the cursor that becomes the ship, from Figma (node 2749:509, 33×33 box)
+  const CURSOR = new Path2D('M4.39491 5.95255C4.03457 4.59127 5.42024 3.42428 6.7004 4.01091L29.2378 14.3385L16.3771 17.8415L10.7397 29.9218L4.39491 5.95255Z');
+  const CURSOR_PIVOT = [16.2, 16.4];
+  // the arrow points up-left (about -134°); turning it this far makes it face right
+  const FACE = Math.PI - Math.atan2(16.18, 15.6);
+  const HOVER_TILT = -10 * Math.PI / 180;
 
-  // Dart hull, from Sweet-Spaceship's SHIP_HULLS.dart (nose at +x, units of s)
-  const HULL = {
-    canopy: [0.55, 0.05], gunY: 1.05, gunX: [-0.62, -0.2], engX: -1.02, engY: 0.14,
-    pts: [[1.55,0],[0.35,-0.28],[-0.1,-0.3],[-0.55,-1.05],[-0.95,-1.05],[-0.75,-0.32],
-          [-1.05,-0.22],[-1.05,0.22],[-0.75,0.32],[-0.95,1.05],[-0.55,1.05],[-0.1,0.3],[0.35,0.28]]
-  };
   const METEOR_R = [11, 20, 32];
-  const IDLE_SCALE = 2.2;
+  const IDLE_SCALE = 1;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -107,12 +109,14 @@
   const keys = {};
   const stick = { active: false, id: null, ox: 0, oy: 0, dx: 0, dy: 0 };
   let firePointer = null;
-  // idle hover: hoverAmt eases 0..1, tweak is a damped spring on the ship's angle
-  let hovered = false, hoverAmt = 0, tweak = 0, tweakV = 0;
+  // idle hover: hoverAmt eases 0..1 and drives the cursor's -10° tilt
+  let hovered = false, hoverAmt = 0;
   const player = {
     x: 0, y: 0, vx: 0, vy: 0, r: 13, hearts: 3, invuln: 0, cooldown: 0,
-    scale: IDLE_SCALE, trail: [], fromX: 0, fromY: 0, fromS: IDLE_SCALE
+    scale: IDLE_SCALE, trail: [], fromX: 0, fromY: 0, fromS: IDLE_SCALE,
+    rot: 0, fromRot: 0
   };
+  let starAlpha = 0; // stars only exist once the game is engaged
 
   function homeX() { return W / 2; }
   function homeY() { return H / 2 - 6; }
@@ -168,7 +172,7 @@
     arena.classList.add('is-open');
     arena.classList.remove('keys-faded');
     canvas.style.touchAction = 'none';
-    player.fromX = player.x; player.fromY = player.y; player.fromS = player.scale;
+    player.fromX = player.x; player.fromY = player.y; player.fromS = player.scale; player.fromRot = player.rot;
     setState('launching');
     sfx.ready();
     wake();
@@ -192,7 +196,7 @@
     enemies = []; meteors = []; bullets = []; enemyBullets = [];
     arena.classList.remove('is-open', 'keys-faded');
     canvas.style.touchAction = '';
-    player.fromX = player.x; player.fromY = player.y; player.fromS = player.scale;
+    player.fromX = player.x; player.fromY = player.y; player.fromS = player.scale; player.fromRot = player.rot;
     player.invuln = 0;
     setState('closing');
     wake();
@@ -331,18 +335,19 @@
       }
     }
 
-    // the tweak spring settles in every state so a hover mid-close still lands softly
-    tweakV += (-tweak * 170 - tweakV * 9) * dt;
-    tweak += tweakV * dt;
-    hoverAmt += ((hovered && state === 'idle' ? 1 : 0) - hoverAmt) * Math.min(1, dt * 10);
+    // hover tilt eases in and out; stars fade in once the game is engaged
+    hoverAmt += ((hovered && state === 'idle' ? 1 : 0) - hoverAmt) * Math.min(1, dt * 12);
+    const wantStars = state === 'idle' || state === 'closing' ? 0 : 1;
+    starAlpha = reduceMotion ? wantStars : starAlpha + (wantStars - starAlpha) * Math.min(1, dt * (wantStars ? 2.2 : 3.5));
 
     if (state === 'idle') {
-      // adrift: a slow figure-of-eight around the middle of the block
+      // adrift: a slow, small figure-of-eight around the middle of the block
       const t = reduceMotion ? 0 : stateT;
-      player.scale = IDLE_SCALE * (1 + 0.07 * hoverAmt);
-      player.x = homeX() + Math.sin(t * 0.45) * Math.min(W * 0.05, 36);
-      player.y = homeY() + Math.sin(t * 0.9) * 7;
-      player.vy = reduceMotion ? 0 : Math.cos(t * 0.9) * 7 * 0.9;
+      player.scale = IDLE_SCALE;
+      player.x = homeX() + Math.sin(t * 0.45) * 10;
+      player.y = homeY() + Math.sin(t * 0.9) * 5;
+      player.vy = 0;
+      player.rot = HOVER_TILT * hoverAmt;
     } else if (state === 'launching') {
       // ship banks and glides to the left of the arena, then the fight starts
       const t = Math.min(1, stateT / 1.1);
@@ -352,8 +357,10 @@
       player.x = player.fromX + (tx - player.fromX) * k;
       player.y = player.fromY + (ty - player.fromY) * k;
       player.scale = player.fromS + (1 - player.fromS) * k;
+      // one full turn plus the quarter-and-a-bit that points the cursor's tip forward
+      player.rot = player.fromRot + (Math.PI * 2 + FACE - player.fromRot) * k;
       player.vy = (player.y - py) / Math.max(dt, 0.001);
-      if (t >= 1) { setState('playing'); player.vx = player.vy = 0; }
+      if (t >= 1) { setState('playing'); player.vx = player.vy = 0; player.rot = FACE; }
       void px;
     } else if (state === 'closing') {
       const t = Math.min(1, stateT / 0.9);
@@ -362,15 +369,17 @@
       player.x = player.fromX + (homeX() - player.fromX) * k;
       player.y = player.fromY + (homeY() - player.fromY) * k;
       player.scale = player.fromS + (IDLE_SCALE - player.fromS) * k;
+      player.rot = player.fromRot * (1 - k); // turns back into a plain cursor
       player.vy = (player.y - py) / Math.max(dt, 0.001);
-      if (t >= 1) setState('idle');
+      if (t >= 1) { setState('idle'); player.rot = 0; }
     } else if (state === 'playing') {
       updatePlaying(dt);
+      player.rot = FACE;
     }
 
     // trail
-    if (state !== 'over') {
-      player.trail.unshift({ x: player.x - 22 * player.scale, y: player.y, life: 1 });
+    if (state === 'playing' || state === 'launching') {
+      player.trail.unshift({ x: player.x - 10, y: player.y, life: 1 });
       if (player.trail.length > 14) player.trail.pop();
     }
     for (const t of player.trail) t.life -= dt * 3.4;
@@ -433,7 +442,7 @@
     player.cooldown -= dt;
     if ((keys[' '] || firePointer !== null) && player.cooldown <= 0) {
       player.cooldown = 0.16;
-      for (const side of [-1, 1]) bullets.push({ x: player.x + 16, y: player.y + 11 * side, vx: 780 });
+      for (const side of [-1, 1]) bullets.push({ x: player.x + 12, y: player.y + 5 * side, vx: 780 });
       sfx.laser();
     }
 
@@ -507,42 +516,23 @@
   }
 
   // ------------------------------------------------------------ drawing (ported)
-  function drawShip(x, y, bank, s, glow = 0) {
-    const u = 15 * s;
+  // the ship is the cursor: Figma's arrow, #222 with a 2px white outline
+  function drawShip(x, y, rot, s) {
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(bank);
-    if (glow > 0.01) {
-      // engines spool up while the ship is hovered
-      ctx.fillStyle = SHIP.main;
-      for (const side of [-1, 1]) {
-        ctx.globalAlpha = 0.18 * glow;
-        ctx.beginPath(); ctx.arc(HULL.engX * u - 4 * glow, side * HULL.engY * u, 7 * Math.sqrt(s) * glow, 0, Math.PI * 2); ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-    }
-    ctx.strokeStyle = SHIP.main;
-    ctx.fillStyle = SHIP.main + '14';
-    ctx.lineWidth = 1.6;
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    HULL.pts.forEach(([px, py], i) => i ? ctx.lineTo(px * u, py * u) : ctx.moveTo(px * u, py * u));
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    ctx.strokeStyle = SHIP.deep;
-    ctx.lineWidth = 1.2;
-    ctx.beginPath(); ctx.moveTo(HULL.canopy[0] * u, 0); ctx.lineTo(HULL.canopy[1] * u, 0); ctx.stroke();
-    for (const side of [-1, 1]) {
-      ctx.beginPath();
-      ctx.moveTo(HULL.gunX[0] * u, side * HULL.gunY * u);
-      ctx.lineTo(HULL.gunX[1] * u, side * HULL.gunY * u);
-      ctx.stroke();
-    }
-    ctx.fillStyle = SHIP.soft;
-    for (const side of [-1, 1]) {
-      ctx.beginPath(); ctx.arc(HULL.engX * u, side * HULL.engY * u, 2.4 * Math.sqrt(s), 0, Math.PI * 2); ctx.fill();
-    }
+    ctx.rotate(rot);
+    ctx.scale(s, s);
+    ctx.translate(-CURSOR_PIVOT[0], -CURSOR_PIVOT[1]);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+    ctx.shadowOffsetY = 8;
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = '#222222';
+    ctx.fill(CURSOR, 'evenodd');
+    ctx.shadowColor = 'transparent';
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 2;
+    ctx.miterLimit = 10;
+    ctx.stroke(CURSOR);
     ctx.restore();
   }
 
@@ -636,8 +626,12 @@
       ctx.globalAlpha = 1;
     }
 
-    ctx.fillStyle = SEC.star;
-    for (const st of stars) ctx.fillRect(st.x, st.y, st.s, st.s);
+    if (starAlpha > 0.01) {
+      ctx.globalAlpha = starAlpha;
+      ctx.fillStyle = SEC.star;
+      for (const st of stars) ctx.fillRect(st.x, st.y, st.s, st.s);
+      ctx.globalAlpha = 1;
+    }
 
     if (state === 'playing' && enemies.length) {
       let nearest = enemies[0], best = Infinity;
@@ -688,15 +682,15 @@
       for (let i = 0; i < player.trail.length; i++) {
         const t = player.trail[i];
         if (t.life <= 0) continue;
-        ctx.globalAlpha = t.life * 0.35;
-        ctx.fillStyle = i % 2 ? SHIP.soft : SHIP.fade;
+        ctx.globalAlpha = t.life * 0.22;
+        ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
-        ctx.arc(t.x - i * 2.4 * player.scale, t.y, Math.max(0.5, (4.2 - i * 0.3) * player.scale), 0, Math.PI * 2);
+        ctx.arc(t.x - i * 2.4, t.y, Math.max(0.5, 3 - i * 0.2), 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.globalAlpha = 1;
       const blink = player.invuln > 0 && Math.floor(player.invuln * 12) % 2 === 0;
-      if (!blink) drawShip(player.x, player.y, Math.max(-0.35, Math.min(0.35, player.vy * 0.00035 * (state === 'playing' ? 1 : 3))) + tweak, player.scale, hoverAmt);
+      if (!blink) drawShip(player.x, player.y, player.rot + (state === 'playing' ? Math.max(-0.3, Math.min(0.3, player.vy * 0.0004)) : 0), player.scale);
     }
 
     ctx.restore();
@@ -760,16 +754,15 @@
   // but a pointer only launches when it lands on the ship itself
   function overShip(e) {
     const r = canvas.getBoundingClientRect();
-    const dx = e.clientX - r.left - (player.x + 4 * player.scale);
+    const dx = e.clientX - r.left - player.x;
     const dy = e.clientY - r.top - player.y;
-    const reach = 15 * player.scale * (e.pointerType === 'touch' ? 1.9 : 1.3);
+    const reach = e.pointerType === 'touch' ? 34 : 18;
     return dx * dx + dy * dy < reach * reach;
   }
   function setHover(on) {
     if (on === hovered) return;
     hovered = on;
     arena.classList.toggle('ship-hover', on);
-    if (on && !reduceMotion) tweakV += (Math.random() < 0.5 ? -1 : 1) * 4.2;
     wake();
   }
   let lastPointer = 'mouse';
@@ -781,8 +774,6 @@
     if (e.detail === 0 || overShip({ clientX: e.clientX, clientY: e.clientY, pointerType: lastPointer })) {
       setHover(false);
       open();
-    } else if (!reduceMotion) {
-      tweakV += (Math.random() < 0.5 ? -1 : 1) * 1.6; // a nudge, so a miss still feels heard
     }
   });
   closeBtn.addEventListener('click', close);

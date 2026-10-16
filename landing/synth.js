@@ -1,6 +1,6 @@
 /* Synth: the keyboard along the bottom of the page (Figma "MiDi").
- * It hides below the window's edge as an easter egg and rises when the pointer
- * finds it. Keys sit back at low opacity; hovering one lifts it, pressing plays a note.
+ * A half-size, dimmed easter egg that stays put along the bottom edge. Keys sit
+ * back at low opacity; hovering one lifts it, pressing plays a note.
  * Press and slide across the keys for a glissando. Middle C sits in the middle.
  */
 (function () {
@@ -9,7 +9,8 @@
   const wrap = document.getElementById('synth-keys');
   if (!wrap) return;
 
-  const WHITE_W = 48.6, PITCH = 50.63, BLACK_W = 32.4, BLACK_X = 32.4; // Figma key metrics
+  // Figma key metrics at half size (white 48.6 × 241, pitch 50.63, black 32.4 × 160)
+  const WHITE_W = 24.3, PITCH = 25.32, BLACK_W = 16.2, BLACK_X = 16.2;
   const WHITE_STEPS = [0, 2, 4, 5, 7, 9, 11];
   const HAS_BLACK = [true, true, false, true, true, true, false]; // C D (E) F G A (B)
 
@@ -120,24 +121,7 @@
     if (k) k.classList.add('is-hover');
   }
 
-  // rise on hover; sink back a moment after the pointer leaves (unless a key is held)
-  const board = document.getElementById('synth');
-  let sinkTimer = 0;
-  const isUp = () => board.classList.contains('is-up');
-  function rise() { clearTimeout(sinkTimer); board.classList.add('is-up'); }
-  function sink(delay) {
-    clearTimeout(sinkTimer);
-    sinkTimer = setTimeout(() => { if (!held.size) board.classList.remove('is-up'); }, delay);
-  }
-  board.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') rise(); });
-  board.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') sink(700); });
-  document.addEventListener('pointerdown', e => {
-    if (e.pointerType !== 'mouse' && isUp() && !board.contains(e.target)) sink(0);
-  });
-
   wrap.addEventListener('pointerdown', e => {
-    // on touch, the first tap only brings the keyboard up
-    if (!isUp()) { e.preventDefault(); rise(); return; }
     const k = keyAt(e);
     if (!k) return;
     e.preventDefault();

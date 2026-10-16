@@ -2,7 +2,7 @@
 
 :root {
   --bg: #111111;
-  --surface: #222222;
+  --arena-bg: #111111; /* same as the page, per Diogo */
   --text: #ffffff;
   --text-dark: #111111;
   --badge: rgba(255, 255, 255, 0.10);
@@ -139,7 +139,7 @@ main { display: block; }
   position: relative;
   margin-top: 48px;
   height: var(--arena-h);
-  background: var(--surface);
+  background: var(--arena-bg);
   overflow: hidden;
   transition: height 0.7s var(--ease);
   user-select: none;

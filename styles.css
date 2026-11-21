@@ -464,6 +464,22 @@ html.dot-cursor * { cursor: none !important; }
 /* ------------------------------------------------------------- crown drag */
 
 .logo { touch-action: none; }
+
+/* The crown rattles every few seconds so people notice it (and try dragging
+   it). It holds still while hovered or picked up. */
+.logo { animation: crown-rattle 3.6s ease-in-out 1.2s infinite; transform-origin: 50% 80%; }
+.logo:hover, .logo.is-lifted { animation: none; }
+
+@keyframes crown-rattle {
+  0%, 74%, 100% { transform: none; }
+  76% { transform: translate(-1px, -1px) rotate(-10deg); }
+  79% { transform: translate(1px, 0) rotate(9deg); }
+  82% { transform: translate(-1px, 1px) rotate(-8deg); }
+  85% { transform: translate(1px, -1px) rotate(6deg); }
+  88% { transform: rotate(-4deg); }
+  91% { transform: rotate(2deg); }
+  94% { transform: none; }
+}
 .logo img { transition: opacity 0.25s var(--ease), transform 0.35s var(--ease); }
 .logo:hover img { transform: rotate(-8deg) scale(1.06); }
 .logo.is-lifted img { opacity: 0.18; transform: none; }
@@ -1048,4 +1064,5 @@ body:has(.arena.is-open) .synth { transform: translateY(100%); }
 
 @media (prefers-reduced-motion: reduce) {
   .cta__track, .arena, .cursor, .cursor svg { transition: none; }
+  .logo { animation: none; }
 }

@@ -1049,3 +1049,16 @@ body:has(.arena.is-open) .synth { transform: translateY(100%); }
 @media (prefers-reduced-motion: reduce) {
   .cta__track, .arena, .cursor, .cursor svg { transition: none; }
 }
+
+/* visually hidden, still read by screen readers and search engines */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
